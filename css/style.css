@@ -1,0 +1,100 @@
+body {
+	background-color: #000;
+	font-family: 'Martel Sans', sans-serif;
+	margin-top: 0px;
+	font-size: 5px;
+}
+
+h3 {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+body p {
+	color: #fff;
+	text-align: right;
+	font-weight: 400;
+}
+
+#title {
+	width: 900px;
+	height: 50px;
+	font-size: 35px;
+	color: white;
+}
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}
+
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+#controlPanel {
+	position: absolute;
+	width: 300px;
+	height: 600px;
+	background-color: #fff;
+	opacity: 0.6;
+	margin-left: 30px;
+}
+
+#networkPlot {
+	position: absolute;
+	width: 900px;
+	height: 600px;
+	margin-left: 350px;
+	background-color: #fff;
+	opacity: 0.6;
+}
+
+circle:hover {
+  fill: #ff7e22;
+}
+
+g.labels {
+	font-weight: normal;
+	visibility: hidden;
+}
+
+g.on {
+	visibility: visible;
+}
+
+text.main {
+	font-weight: bold;
+}
+
+.lasso path {
+    stroke: rgb(80,80,80);
+    stroke-width:2px;
+}
+
+.lasso .drawn {
+    fill-opacity:.05 ;
+}
+
+.lasso .loop_close {
+    fill:none;
+    stroke-dasharray: 4,4;
+}
+
+.lasso .origin {
+    fill:#3399FF;
+    fill-opacity:.5;
+}
+
+.not_possible {
+    fill: rgb(200,200,200);
+}
+
+.possible {
+    fill: #EC888C;
+}
+
+.selected {
+    fill: steelblue;
+}

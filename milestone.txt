@@ -1,0 +1,9 @@
+At present, we have completed the following: 
+1. Yingdi has visualized the node-link diagram for all the nodes and links, and also made the entire diagram zoomable; 
+2. Jiayu has implemented the matrices rendering part. He also wrapped a matrix class and a path class including data preprocessing and updating functions so that further implementation on interaction can be easier.
+
+For the next step, we are going to implement: 
+1. Finish the path drawing and path updating with dragging the nodes;
+1. Add a control panel to the visualization, enabling the adjustment to the size of the links and labels; 
+2. Add more interactions, including the lasso selection, merging and splitting nodes, merging matrices; 
+3. Improve the user interface to be more readable and user-friendly. 

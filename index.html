@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>A Song of Ice and Fire</title>
+	<meta charset="utf-8">
+	<style>
+      @import url('https://fonts.googleapis.com/css?family=Martel+Sans:200,400,700,800,900');
+    </style>
+	<script src="lib/d3/d3.js" charset="utf-8"></script>
+	<script src="lib/d3/d3.min.js" charset="utf-8"></script>
+	<script src="lib/d3-lasso.min.js" charset="utf-8"></script>
+	<script src="lib/keymaster.js" charset="utf-8"></script>
+	<!-- <script src="src/path.js" charset="utf-8"></script> -->
+	<script src="src/lasso.js" charset="utf-8"></script>
+	<script src="src/zoom.js" charset="utf-8"></script>
+	<script src='src/matrix.js' charset='utf-8'></script>
+	<script src='src/force.js' charset='utf-8'></script>
+	<script src="lib/d3-tip.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+<body>
+	<header>
+		
+	</header>
+	<div id="title">A Song of Ice and Fire</div>
+	<div id="background">
+		<div id="controlPanel">
+			<div id="bookSelector"></div>
+			<div id="nodeSlider"></div>
+		</div>
+		<div id="networkPlot"></div>
+		<script>
+		var margin = {top: 10, right: 20, bottom: 40, left: 50},
+		width = 900 - margin.left - margin.right,
+		height = 600 - margin.top - margin.bottom;
+		var svg = d3.select('#networkPlot')
+					.append('svg')
+					.attr('id', 'mainsvg')
+					.attr('width', width)
+					.attr('height', height);
+		var matrix_layer = svg.append('g').attr('id', 'matrix');
+		var force_layer = svg.append('g').attr('id', 'force');
+		var path_layer = svg.append('g').attr('id', 'path');
+		d3.csv('data/asoiaf-book1-edges.csv', function(error, dataLink) {
+			d3.csv("data/asoiaf-book1-nodes.csv", function(errNode, dataNode) {
+				var matrix_list = [];
+				var transform = {
+					x: 0.0,
+					y: 0.0,
+					k: 1.0
+				};
+				
+				var m = new Matrix(0);
+				m.create(['Aemon-Targaryen-(Maester-Aemon)', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
+				matrix_list.push(m);
+				
+				for (var i in matrix_list) matrix_list[i].render();
+				draw_force(m.nodes, width, height, dataLink, dataNode, transform, svg);
+
+				Lasso(svg);
+			
+			//suggest I have a list of m
+			});
+		});
+		</script>
+	</div>
+	
+	<h1>Copyright &copy; 2018 Jiayu Tang & Yingdi Liu<h1>
+</body>
+</html>
