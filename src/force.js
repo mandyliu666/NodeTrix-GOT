@@ -32,7 +32,9 @@ function draw_force(matrix_nodes, networkWidth, networkHeight, dataLink, dataNod
 		var simulation = d3.forceSimulation()
 			.force("link", d3.forceLink().id(function(d) { return d.id; }))
 			.force("charge", d3.forceManyBody())
-			.force("center", d3.forceCenter(networkWidth / 2, networkHeight / 2));
+			.force("center", d3.forceCenter(networkWidth / 2, networkHeight / 2))
+			.force("x", d3.forceX(networkWidth * 0.8))
+        	.force("y", d3.forceY(networkHeight * 0.8));
 
 		function dragstarted(d) {
 		    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
