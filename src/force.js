@@ -4,7 +4,7 @@ function draw_force(matrix_nodes, networkWidth, networkHeight, dataLink, dataNod
 		var dataNodes = [];
 		var nodeWeight = {};
 		var neighbors = {};
-		var threshold = 2.5;
+		var threshold = 2;
 
 		dataNode.forEach(function(d) {
 			if (matrix_nodes.indexOf(d.Id)<0) {
@@ -70,12 +70,13 @@ function draw_force(matrix_nodes, networkWidth, networkHeight, dataLink, dataNod
 				return "n" + d.id;
 			})
 		    .attr("fill", "#bbb")
+			.attr('pointer-events', 'all')
+		    .on("mouseover", function(d) { highlight(d, true); })
+		    .on("mouseout", function(d) { highlight(d, false); })
 		    .call(d3.drag()
 		    .on("start", dragstarted)
 		    .on("drag", dragged)
-		    .on("end", dragended))
-		    .on("mouseover", function(d) { highlight(d, true, this); })
-		    .on("mouseout", function(d) { highlight(d, false, this); });
+		    .on("end", dragended));
 
 	    var label = network.append("g")
 	        .attr("class", "labels")
@@ -136,12 +137,12 @@ function draw_force(matrix_nodes, networkWidth, networkHeight, dataLink, dataNod
 
 			var nid = parseId(node.id);
 
-			var circle = d3.select("#n" + nid);
-			var label = d3.select("#l" + nid);
+			var c = d3.select("#n" + nid);
+			var l = d3.select("#l" + nid);
 
-	      	circle.classed("main", state);
-	      	label.classed("on", state || trans.k >= threshold);
-	      	label.selectAll("text").classed("main", state);
+	      	c.classed("main", state);
+	      	l.classed("on", state || trans.k >= threshold);
+	      	l.classed("main", state);
 		
 			// activate all siblings
 	      	neighbors[node.id].forEach( 
