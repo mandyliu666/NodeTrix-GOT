@@ -26,7 +26,9 @@
 	<div id="background">
 		<div id="controlPanel">
 			<div id="bookSelector"></div>
-			<div id="nodeSlider"></div>
+			<div id="nodeSlider">
+				<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+			</div>
 		</div>
 		<div id="networkPlot"></div>
 		<script>
@@ -58,6 +60,15 @@
 				draw_force(m.nodes, width, height, dataLink, dataNode, transform, svg);
 
 				Lasso(svg);
+
+				// var slider = document.getElementById("myRange");
+				// var output = document.getElementById("demo");
+				// output.innerHTML = slider.value; // Display the default slider value
+
+				// // Update the current slider value (each time you drag the slider handle)
+				// slider.oninput = function() {
+				//     output.innerHTML = this.value;
+				// }
 			
 			//suggest I have a list of m
 			});
