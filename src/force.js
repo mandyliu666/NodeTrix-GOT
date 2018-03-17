@@ -7,30 +7,40 @@ function draw_force(matrix_nodes, networkWidth, networkHeight, dataLink, dataNod
 		var threshold = 2;
 
 		dataNode.forEach(function(d) {
+			d.id = d.Id;
+			d.label = d.Label;
+			nodeWeight[d.id] = 0;
+			neighbors[d.id] = [];
 			if (matrix_nodes.indexOf(d.Id)<0) {
-				d.id = d.Id;
-				d.label = d.Label;
 				dataNodes.push(d);
-				nodeWeight[d.id] = 0;
-				neighbors[d.id] = [];
 			}
 		});
 
 		dataLink.forEach(function(d) {
+			d.weight = +d.weight;
+			d.source = d.Source;
+			d.target = d.Target;
+			nodeWeight[d.source]++;
+			nodeWeight[d.target]++;
 			if (matrix_nodes.indexOf(d.Source)<0 && matrix_nodes.indexOf(d.Target)<0) { 
-				d.weight = +d.weight;
-				d.source = d.Source;
-				d.target = d.Target;
 				dataLinks.push(d);
-				nodeWeight[d.source]++;
-				nodeWeight[d.target]++;
 				neighbors[d.source].push(d.target);
 				neighbors[d.target].push(d.source);
 			}
 		});
 
+		dataNodes = dataNodes.filter(function(d) {
+			return nodeWeight[d.id] >= 3;
+			//return d;
+		});
+
+		dataLinks = dataLinks.filter(function(d) {
+			return nodeWeight[d.source] >= 3 && nodeWeight[d.target] >= 3;
+			//return d;
+		});
+
 		var simulation = d3.forceSimulation()
-			.force("link", d3.forceLink().id(function(d) { return d.id; }))
+			.force("link", d3.forceLink().id(function(d) { return d.id; }).distance(function(d) { return 10; }))
 			.force("charge", d3.forceManyBody())
 			.force("center", d3.forceCenter(networkWidth / 2, networkHeight / 2))
 			.force("x", d3.forceX(networkWidth * 0.8))
