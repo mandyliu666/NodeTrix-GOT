@@ -1,6 +1,6 @@
 
 // semantic zoom, not geometric zoom
-function Zoom(zoomArea, link, node, label, trans) {
+function Zoom(zoomArea, link, node, label, trans, threshold, simulation) {
 	// var links = d3.selectAll("line");
 	// links.transition().duration(200).attr("transform", transform(d3.zoomIdentity));
 	// var nodes = d3.selectAll("circle");
@@ -14,11 +14,17 @@ function Zoom(zoomArea, link, node, label, trans) {
 	//transformArea.attr("transform", transform(d3.zoomIdentity));
 
 	function zoomed() {
-		// transformArea.attr("transform", d3.event.transform);
+		transformArea.attr("transform", d3.event.transform);
 
 		var k = d3.event.transform.k;
 		var x = d3.event.transform.x;
 		var y = d3.event.transform.y;
+
+		// See if we cross the 'show' threshold in either direction
+      	if(k >= threshold)
+			svg.selectAll("text").classed('on',true);
+      	else if(k < threshold)
+			svg.selectAll("text").classed('on',false);
 
 		// // move edges
 	 //    links.attr("x1", function(d) { return x + k * (d.source.x); })

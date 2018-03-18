@@ -111,39 +111,36 @@ function draw_force(matrix_nodes, networkWidth, networkHeight, dataLink, dataNod
 
 		function ticked() {
 
-		    link
-		        .attr("x1", function(d) { return trans.x + trans.k * d.source.x; })
-		        .attr("y1", function(d) { return trans.y + trans.k * d.source.y; })
-		        .attr("x2", function(d) { return trans.x + trans.k * d.target.x; })
-		        .attr("y2", function(d) { return trans.y + trans.k * d.target.y; });
-			    
-			node
-				.attr("cx", function(d) { 
-					//d.x = Math.max(10, Math.min(networkWidth - 10, d.x));
-					return trans.x + trans.k * d.x; })
-				.attr("cy", function(d) { 
-					//d.y = Math.max(10, Math.min(networkHeight - 10, d.y));
-					return trans.y + trans.k * d.y; });
-
-			label
-				.attr("x", function(d) { return trans.x + trans.k * d.x+12; })
-				.attr("y", function(d) { return trans.y + trans.k * d.y+3; });
-			// link
-		 //        .attr("x1", function(d) { return d.source.x; })
-		 //        .attr("y1", function(d) { return d.source.y; })
-		 //        .attr("x2", function(d) { return d.target.x; })
-		 //        .attr("y2", function(d) { return d.target.y; });
+		 //    link
+		 //        .attr("x1", function(d) { return trans.x + trans.k * d.source.x; })
+		 //        .attr("y1", function(d) { return trans.y + trans.k * d.source.y; })
+		 //        .attr("x2", function(d) { return trans.x + trans.k * d.target.x; })
+		 //        .attr("y2", function(d) { return trans.y + trans.k * d.target.y; });
 			    
 			// node
-			// 	.attr("cx", function(d) { return d.x; })
-			// 	.attr("cy", function(d) { return d.y; });
+			// 	.attr("cx", function(d) { return trans.x + trans.k * d.x; })
+			// 	.attr("cy", function(d) { return trans.y + trans.k * d.y; });
 
 			// label
-			// 	.attr("x", function(d) { return d.x+12; })
-			// 	.attr("y", function(d) { return d.y+3; });
+			// 	.attr("x", function(d) { return trans.x + trans.k * d.x+12; })
+			// 	.attr("y", function(d) { return trans.y + trans.k * d.y+3; });
+			
+			link
+		        .attr("x1", function(d) { return d.source.x; })
+		        .attr("y1", function(d) { return d.source.y; })
+		        .attr("x2", function(d) { return d.target.x; })
+		        .attr("y2", function(d) { return d.target.y; });
+			    
+			node
+				.attr("cx", function(d) { return d.x; })
+				.attr("cy", function(d) { return d.y; });
+
+			label
+				.attr("x", function(d) { return d.x+12; })
+				.attr("y", function(d) { return d.y+3; });
 		}
 
-		Zoom(svg, link, node, label, trans);
+		Zoom(svg, link, node, label, trans, threshold, simulation);
 
 		function highlight(node, state) {
 

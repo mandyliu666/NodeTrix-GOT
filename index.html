@@ -43,6 +43,7 @@
 		var matrix_layer = svg.append('g').attr('id', 'matrix');
 		var force_layer = svg.append('g').attr('id', 'force');
 		var path_layer = svg.append('g').attr('id', 'path');
+		var bookNumber = 0;
 		d3.csv('data/asoiaf-book1-edges.csv', function(error, dataLink) {
 			d3.csv("data/asoiaf-book1-nodes.csv", function(errNode, dataNode) {
 				var matrix_list = [];
@@ -51,6 +52,7 @@
 					y: 0.0,
 					k: 1.0
 				};
+				var threshold = 2;
 				
 				var m = new Matrix(0);
 				m.create(['Aemon-Targaryen-(Maester-Aemon)', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
