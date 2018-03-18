@@ -13,12 +13,9 @@
 	<script src="src/lasso.js" charset="utf-8"></script>
 	<script src="src/zoom.js" charset="utf-8"></script>
 	<script src='src/matrix.js' charset='utf-8'></script>
-<<<<<<< HEAD
 	<script src='src/graph.js' charset='utf-8'></script>
-=======
-	<script src='src/force.js' charset='utf-8'></script>
+<!-- 	<script src='src/force.js' charset='utf-8'></script> -->
 	<script src="src/path.js" charset="utf-8"></script>
->>>>>>> f927047794d6b70614548e604c0e2b9f4fde7734
 	<script src="lib/d3-tip.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
@@ -109,7 +106,6 @@
 				var graph = new Graph();
 				graph.create(width, height, dataLinks, dataNodes, neighbors, nodeWeight, transform);
 
-<<<<<<< HEAD
 				svg.on("keydown", function() {
 					if(key.shift) {
 						// unbind zoom
@@ -117,6 +113,8 @@
 						//var lasso = new Lasso();
 					}
 				});
+
+				svg.on("mouse")
 
 				var l = new Lasso();
 				l.bind();
@@ -126,12 +124,11 @@
 
 				//var zoom = new Zoom();
 				//zoom.create(svg, force_layer, transform);
-=======
-				Lasso(svg);
+
 				var paths = new Paths();
 				paths.Create(m.nodes, matrix_list, dataNode, dataLink);
 				paths.Render();
->>>>>>> f927047794d6b70614548e604c0e2b9f4fde7734
+
 				// var slider = document.getElementById("myRange");
 				// var output = document.getElementById("demo");
 				// output.innerHTML = slider.value; // Display the default slider value
