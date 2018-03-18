@@ -1,11 +1,10 @@
-(function()
-{
+
 	function Paths() {
 		this.data = [];
 		this.locallayer = d3.select();
 	}
 
-	Path.prototype.create(matrix_nodes, matrix_list, dataNode, dataLink) {
+	Paths.prototype.Create = function(matrix_nodes, matrix_list, dataNode, dataLink) {
 		var _this = this;
 		dataLink.forEach(function(d) {
 			var in_matrix, in_force;
@@ -18,32 +17,37 @@
 				in_force = d.Source;
 			}
 			else return;
-			
-			var node = d3.select(function() {return '#'+in_force;});
+			//console.log(in_force);
+			var node = d3.selectAll('#n'+in_force);
+			if (node.empty()) return;
+//			console.log(node);
+			console.log(node.attr(''));
 			var matrix;
 			var num;
 			
-			for (var i in matrix_list) if (matrix_list[i].node.indexOf(in_matrix) >= 0) {
-				//matrix = d3.select(function() {return '.'+i;});
+			for (var i in matrix_list) if (matrix_list[i].nodes.indexOf(in_matrix) >= 0) {
+				//console.log(d3.selectAll(function() {return '.matrix'+i;}));
 				matrix = matrix_list[i];
-				num = matrix_list[i].node.indexOf(in_matrix);
+				//console.log(matrix);
+				num = matrix_list[i].nodes.indexOf(in_matrix);
 				break;
 			}
 			
 			_this.data.push({
 				matrix_id: in_matrix,
 				force_id: in_force,
-				center: {x: function() {return matrix.x+num*matrix.unitsize+matrix.unitsize/2;}, y: function() {return matrix.y+num*matrix.unitsize+matrix.unitsize/2;}},
-				pos0: {x: function() {return matrix.x+num*matrix.unitsize+matrix.unitsize/2;}, y: function() {return matrix.y;}},
-				pos1: {x: function() {return matrix.x;}, y: function() {return matrix.y+num*matrix.unitsize+matrix.unitsize/2;}},
-				pos2: {x: function() {return matrix.x+matrix.num_nodes*matrix.unitsize;}, y: function() {return matrix.y+num*matrix.unitsize+matrix.unitsize/2;}},
-				pos3: {x: function() {return matrix.x+num*matrix.unitsize+matrix.unitsize/2;}, y: function() {return matrix.y+matrix.num_nodes*matrix.unitsize;}},
-				pos_end: {x: node.attr('x'), y: node.attr('y')},
+				center: {x: matrix.x+num*matrix.unitsize+matrix.unitsize/2, y: matrix.y+num*matrix.unitsize+matrix.unitsize/2},
+				pos0: {x: matrix.x+num*matrix.unitsize+matrix.unitsize/2, y: matrix.y},
+				pos1: {x: matrix.x, y: matrix.y+num*matrix.unitsize+matrix.unitsize/2},
+				pos2: {x: matrix.x+matrix.num_nodes*matrix.unitsize, y: matrix.y+num*matrix.unitsize+matrix.unitsize/2},
+				pos3: {x: matrix.x+num*matrix.unitsize+matrix.unitsize/2, y: matrix.y+matrix.num_nodes*matrix.unitsize},
+				pos_end: {x: node.attr('cx'), y: node.attr('cy')},
 			})
 		});
+		console.log(_this.data);
 	}
 	
-	Paths.prototype.render = function() {
+	Paths.prototype.Render = function() {
 		var _this = this;
 		var generate = function(d) {
 			var result = [];
@@ -59,13 +63,13 @@
 			return result;
 		}
 	
-		var line = d3.svg.line(); 
+		var line = d3.line(); 
 		this.locallayer.selectAll('path')
 					.data(_this.data)
 					.enter()
 					.append('path')
-					.attr('d', line(generate(d))
+					.attr('d', function(d) {return line(generate(d));})
 					.attr('stroke-width', 2);
 		
 	}
-}());
+

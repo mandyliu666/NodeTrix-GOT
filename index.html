@@ -10,11 +10,15 @@
 	<script src="lib/d3/d3.min.js" charset="utf-8"></script>
 	<script src="lib/d3-lasso.min.js" charset="utf-8"></script>
 	<script src="lib/keymaster.js" charset="utf-8"></script>
-	<!-- <script src="src/path.js" charset="utf-8"></script> -->
 	<script src="src/lasso.js" charset="utf-8"></script>
 	<script src="src/zoom.js" charset="utf-8"></script>
 	<script src='src/matrix.js' charset='utf-8'></script>
+<<<<<<< HEAD
 	<script src='src/graph.js' charset='utf-8'></script>
+=======
+	<script src='src/force.js' charset='utf-8'></script>
+	<script src="src/path.js" charset="utf-8"></script>
+>>>>>>> f927047794d6b70614548e604c0e2b9f4fde7734
 	<script src="lib/d3-tip.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
@@ -40,12 +44,20 @@
 					.attr('id', 'mainsvg')
 					.attr('width', width)
 					.attr('height', height);
+		//console.log(d3.select('#mainsvg'));
 		var matrix_layer = svg.append('g').attr('id', 'matrix');
 		var force_layer = svg.append('g').attr('id', 'force');
 		var path_layer = svg.append('g').attr('id', 'path');
-		var bookNumber = 0;
 		d3.csv('data/asoiaf-book1-edges.csv', function(error, dataLink) {
+			dataLink.forEach(function(d) {
+				d.Target = split(d.Target);
+				d.Source = split(d.Source);
+			});
 			d3.csv("data/asoiaf-book1-nodes.csv", function(errNode, dataNode) {
+				dataNode.forEach(function(d) {
+					d.Id = split(d.Id);
+				});
+				//console.log
 				var matrix_list = [];
 				var transform = {
 					x: 0.0,
@@ -58,7 +70,7 @@
 				var nodeWeight = {};
 				var neighbors = {};
 				var m = new Matrix(0);
-				m.create(['Aemon-Targaryen-(Maester-Aemon)', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
+				m.create(['Aemon-Targaryen-', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
 				matrix_list.push(m);
 
 				dataNode.forEach(function(d) {
@@ -97,6 +109,7 @@
 				var graph = new Graph();
 				graph.create(width, height, dataLinks, dataNodes, neighbors, nodeWeight, transform);
 
+<<<<<<< HEAD
 				svg.on("keydown", function() {
 					if(key.shift) {
 						// unbind zoom
@@ -113,6 +126,12 @@
 
 				//var zoom = new Zoom();
 				//zoom.create(svg, force_layer, transform);
+=======
+				Lasso(svg);
+				var paths = new Paths();
+				paths.Create(m.nodes, matrix_list, dataNode, dataLink);
+				paths.Render();
+>>>>>>> f927047794d6b70614548e604c0e2b9f4fde7734
 				// var slider = document.getElementById("myRange");
 				// var output = document.getElementById("demo");
 				// output.innerHTML = slider.value; // Display the default slider value
@@ -125,6 +144,10 @@
 			//suggest I have a list of m
 			});
 		});
+		var split = function(str) {
+			if (str.indexOf('(') >= 0) str = str.slice(0, str.indexOf('('));
+			return str;
+		}
 		</script>
 	</div>
 	

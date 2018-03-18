@@ -21,8 +21,10 @@ Matrix.prototype.create = function(node, data) {
 	this.num_nodes = node.length;
 	//console.log(data);
 	data.forEach(function(d, i) {
-		if ((node.includes(d.Source)) && (node.includes(d.Target))) _this.edges.push(d);
-		_this.num_edges=_this.num_edges+1;
+		if ((node.includes(d.Source)) && (node.includes(d.Target))) {
+			_this.edges.push(d);
+			_this.num_edges=_this.num_edges+1;
+		}
 	});
 	var m = this.adj_matrix;
 	for (var i in node) {
