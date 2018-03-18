@@ -94,6 +94,10 @@ g.labels {
 	visibility: visible;
 }
 
+text.on {
+    visibility: visible;
+}
+
 .label.main {
 	font-weight: bolder;
 }
@@ -118,15 +122,15 @@ g.labels {
 }
 
 .not_possible {
-    fill: rgb(200,200,200);
+    /*fill: rgb(200,200,200);*/
 }
 
 .possible {
-    fill: #EC888C;
+    fill: yellow;
 }
 
 .selected {
-    fill: steelblue;
+    fill: green;
 }
 
 #nodeSlider {

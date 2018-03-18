@@ -44,10 +44,6 @@
 		var matrix_layer = svg.append('g').attr('id', 'matrix');
 		var force_layer = svg.append('g').attr('id', 'force');
 		var path_layer = svg.append('g').attr('id', 'path');
-		var split = function(str) {
-			if (str.indexOf('(') >= 0) str = str.slice(0, str.indexOf('('));
-			return str;
-		}
 		d3.csv('data/asoiaf-book1-edges.csv', function(error, dataLink) {
 			dataLink.forEach(function(d) {
 				d.Target = split(d.Target);
@@ -64,13 +60,14 @@
 					y: 0.0,
 					k: 1.0
 				};
+				var threshold = 2;
 				
 				var m = new Matrix(0);
 				m.create(['Aemon-Targaryen-', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
 				matrix_list.push(m);
 				
 				for (var i in matrix_list) matrix_list[i].render();
-				draw_force(m.nodes, width, height, dataLink, dataNode, transform, svg);
+				draw_force(m.nodes, width, height, dataLink, dataNode, transform, svg, force_layer);
 
 				Lasso(svg);
 				var paths = new Paths();
@@ -88,7 +85,10 @@
 			//suggest I have a list of m
 			});
 		});
-		
+		var split = function(str) {
+			if (str.indexOf('(') >= 0) str = str.slice(0, str.indexOf('('));
+			return str;
+		}
 		</script>
 	</div>
 	

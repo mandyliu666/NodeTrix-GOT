@@ -1,44 +1,46 @@
 function Lasso(svg) {
-	if(key.isPressed('shift')) console.log("pressed!");
-	else console.log("wrong!");
 
 	var circles = d3.selectAll("circle");
 	// Lasso functions
 	var lasso_start = function() {
-	    lasso.items()
-	    	//.attr("fill", "#bbb")
-	    	.classed("not_possible",true)
-	        .classed("selected",false);
+		if(key.shift) {
+			lasso.items()
+		    	//.attr("fill", "#bbb")
+		    	.classed("not_possible",true)
+		        .classed("selected",false);
+		}
 	};
 
 	var lasso_draw = function() {
-	        
-	// Style the possible dots
-	lasso.possibleItems()
-	    .classed("not_possible",false)
-	    .classed("possible",true);
+	    if(key.shift) {
+	    	// Style the possible dots
+			lasso.possibleItems()
+			    .classed("not_possible",false)
+			    .classed("possible",true);
 
-	// Style the not possible dot
-	lasso.notPossibleItems()
-	    .classed("not_possible",true)
-	    .classed("possible",false);
+			// Style the not possible dot
+			lasso.notPossibleItems()
+			    .classed("not_possible",true)
+			    .classed("possible",false);
+	    }
 	};
 
 	var lasso_end = function() {
-		// Reset the color of all dots
-	    lasso.items()
-	        .classed("not_possible",false)
-	        .classed("possible",false);
+		if(key.shift) {
+			// Reset the color of all dots
+		    lasso.items()
+		        .classed("not_possible",false)
+		        .classed("possible",false);
 
-		// Style the selected dots
-	    lasso.selectedItems()
-	        .classed("selected",true)
-	        .attr("fill", "red");
+			// Style the selected dots
+		    lasso.selectedItems()
+		        .classed("selected",true)
+		        .attr("fill", "red");
 
-	    // Reset the style of the not selected dots
-	    lasso.notSelectedItems()
-	        .attr("fill", "#bbb");
-
+		    // Reset the style of the not selected dots
+		    lasso.notSelectedItems()
+		        .attr("fill", "#bbb");
+		}
 	};
 	        
 	var lasso = d3.lasso()
@@ -46,9 +48,9 @@ function Lasso(svg) {
 	    .closePathDistance(100)
 	    .items(circles)
 	    .targetArea(svg)
-	    .on("start",lasso_start)
-	    .on("draw",lasso_draw)
-	    .on("end",lasso_end);
+	    .on("start", lasso_start)
+	    .on("draw", lasso_draw)
+	    .on("end", lasso_end);
 	        
 	svg.call(lasso);
 }
