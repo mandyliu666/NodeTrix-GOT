@@ -80,7 +80,7 @@ function draw_force(matrix_nodes, networkWidth, networkHeight, dataLink, dataNod
 		    	return Math.sqrt(nodeWeight[d.id] + 10)})
 			.attr("id", function(d) {
 				//console.log(d.id);
-				return d.id;
+				return 'n' + d.id;
 			})
 		    .attr("fill", "#bbb")
 			.attr('pointer-events', 'all')

@@ -18,7 +18,7 @@
 			}
 			else return;
 			//console.log(in_force);
-			var node = d3.selectAll('#'+in_force);
+			var node = d3.selectAll('#n'+in_force);
 			if (node.empty()) return;
 //			console.log(node);
 			console.log(node.attr(''));
