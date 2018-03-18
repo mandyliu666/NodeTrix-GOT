@@ -14,7 +14,7 @@
 	<script src="src/lasso.js" charset="utf-8"></script>
 	<script src="src/zoom.js" charset="utf-8"></script>
 	<script src='src/matrix.js' charset='utf-8'></script>
-	<script src='src/force.js' charset='utf-8'></script>
+	<script src='src/graph.js' charset='utf-8'></script>
 	<script src="lib/d3-tip.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
@@ -53,16 +53,66 @@
 					k: 1.0
 				};
 				var threshold = 2;
-				
+				var dataLinks = [];
+				var dataNodes = [];
+				var nodeWeight = {};
+				var neighbors = {};
 				var m = new Matrix(0);
 				m.create(['Aemon-Targaryen-(Maester-Aemon)', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
 				matrix_list.push(m);
+
+				dataNode.forEach(function(d) {
+					d.id = d.Id;
+					d.label = d.Label;
+					nodeWeight[d.id] = 0;
+					neighbors[d.id] = [];
+					if (m.nodes.indexOf(d.Id) < 0) {
+						dataNodes.push(d);
+					}
+				});
+
+				dataLink.forEach(function(d) {
+					d.weight = +d.weight;
+					d.source = d.Source;
+					d.target = d.Target;
+					nodeWeight[d.source]++;
+					nodeWeight[d.target]++;
+					neighbors[d.source].push(d.target);
+					neighbors[d.target].push(d.source);
+					if(m.nodes.indexOf(d.source)<0 && m.nodes.indexOf(d.target)<0) { 
+						dataLinks.push(d);
+					}
+				});
+
+				dataNodes = dataNodes.filter(function(d) {
+					return nodeWeight[d.id] >= 3;
+				});
+
+				dataLinks = dataLinks.filter(function(d) {
+					return nodeWeight[d.source] >= 3 && nodeWeight[d.target] >= 3;
+				});
 				
 				for (var i in matrix_list) matrix_list[i].render();
-				draw_force(m.nodes, width, height, dataLink, dataNode, transform, svg, force_layer);
+				//draw_force(width, height, dataLinks, dataNodes, transform, svg, force_layer);
+				var graph = new Graph();
+				graph.create(width, height, dataLinks, dataNodes, neighbors, nodeWeight, transform);
 
-				Lasso(svg);
+				svg.on("keydown", function() {
+					if(key.shift) {
+						// unbind zoom
+						// bind lasso
+						//var lasso = new Lasso();
+					}
+				});
 
+				var l = new Lasso();
+				l.bind();
+
+				
+				
+
+				//var zoom = new Zoom();
+				//zoom.create(svg, force_layer, transform);
 				// var slider = document.getElementById("myRange");
 				// var output = document.getElementById("demo");
 				// output.innerHTML = slider.value; // Display the default slider value

@@ -1,17 +1,10 @@
+function Zoom(zoomArea, transformArea, trans) {
+	this.zoom = d3.zoom();
+	this.available = false;
+	this.svg = d3.select("#mainsvg");
+	this.threshold = 2;
 
-// semantic zoom, not geometric zoom
-function Zoom(zoomArea, transformArea, link, node, label, trans, threshold, simulation) {
-	// var links = d3.selectAll("line");
-	// links.transition().duration(200).attr("transform", transform(d3.zoomIdentity));
-	// var nodes = d3.selectAll("circle");
-	// nodes.transition().duration(200).attr("transform", transform(d3.zoomIdentity));
-	// var labels = d3.select("label");
-	// labels.transition().duration(200).attr("transform", transform(d3.zoomIdentity));
-	var zoom = d3.zoom().scaleExtent([0.5, 3]).on("zoom", zoomed);
-
-	//zoomArea.call(d3.zoom().scaleExtent([1, 3]).on("zoom", zoomed));
-
-	//transformArea.attr("transform", transform(d3.zoomIdentity));
+	this.zoom.scaleExtent([0.5, 3]).on("zoom", zoomed);
 
 	function zoomed() {
 		transformArea.attr("transform", d3.event.transform);
@@ -20,40 +13,40 @@ function Zoom(zoomArea, transformArea, link, node, label, trans, threshold, simu
 		var x = d3.event.transform.x;
 		var y = d3.event.transform.y;
 
-		// See if we cross the 'show' threshold in either direction
-      	if(k >= threshold)
-			svg.selectAll("text").classed('on',true);
-      	else if(k < threshold)
-			svg.selectAll("text").classed('on',false);
-
-		// // move edges
-	 //    links.attr("x1", function(d) { return x + k * (d.source.x); })
-	 //    .attr("y1", function(d) { return y + k * (d.source.y); })
-	 //    .attr("x2", function(d) { return x + k * (d.target.x); })
-	 //    .attr("y2", function(d) { return y + k * (d.target.y); });
-
-	 //    // move nodes
-	 //    nodes.attr("transform", function(d) { return "translate(" + (x + k * d.x) + "," + (y + k * d.y) + ")" });
-
-	 //    // move labels
-	 //    labels.attr("transform", function(d) { return "translate(" + (x + k * d.x) + "," + (y + k * d.y) + ")" });
-
-	 //links.attr("transform", transform(d3.event.transform));
-	 //nodes.attr("transform", transform(d3.event.transform));
-	 //labels.attr("transform", transform(d3.event.transform));
-
-
-	    trans.k = k;
+		trans.k = k;
 	   	trans.x = x;
 	   	trans.y = y;
 	};
 
-	// function transform(t) {
- //  		return function(d) {
- //    		return "translate(" + t.apply(d) + ")";
- //  		};
-	// };
+	console.log(this.svg.on("mousedown.zoom"));
 
-	zoom(zoomArea);
+	this.mousedownZoom = this.svg.on("mousedown.zoom"); 
+	this.mousemoveZoom = this.svg.on("mousemove.zoom"); 
+	this.touchstartZoom = this.svg.on("touchstart.zoom");
 
+	this.svg.on("mousedown.zoom", null); 
+	this.svg.on("mousemove.zoom", null); 
+	this.svg.on("touchstart.zoom", null); 
+
+	this.zoom(this.svg);
+
+	// See if we cross the 'show' threshold in either direction
+//    	if(k >= this.threshold)
+		// this.svg.selectAll("text").classed('on',true);
+//    	else if(k < this.threshold)
+		// this.svg.selectAll("text").classed('on',false);
+
+
+}
+
+Zoom.prototype.bind = function () {
+	this.svg.on("mousedown.zoom", this.mousedownZoom);
+	this.svg.on("mousemove.zoom", this.mousemoveZoom); 
+	this.svg.on("touchstart.zoom", this.touchstartZoom);
 };
+
+Zoom.prototype.unbind = function () {
+	this.svg.on("mousedown.zoom", null); 
+	this.svg.on("mousemove.zoom", null); 
+	this.svg.on("touchstart.zoom", null); 
+}
