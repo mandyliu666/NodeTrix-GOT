@@ -10,11 +10,11 @@
 	<script src="lib/d3/d3.min.js" charset="utf-8"></script>
 	<script src="lib/d3-lasso.min.js" charset="utf-8"></script>
 	<script src="lib/keymaster.js" charset="utf-8"></script>
-	<!-- <script src="src/path.js" charset="utf-8"></script> -->
 	<script src="src/lasso.js" charset="utf-8"></script>
 	<script src="src/zoom.js" charset="utf-8"></script>
 	<script src='src/matrix.js' charset='utf-8'></script>
 	<script src='src/force.js' charset='utf-8'></script>
+	<script src="src/path.js" charset="utf-8"></script>
 	<script src="lib/d3-tip.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
@@ -40,11 +40,24 @@
 					.attr('id', 'mainsvg')
 					.attr('width', width)
 					.attr('height', height);
+		//console.log(d3.select('#mainsvg'));
 		var matrix_layer = svg.append('g').attr('id', 'matrix');
 		var force_layer = svg.append('g').attr('id', 'force');
 		var path_layer = svg.append('g').attr('id', 'path');
+		var split = function(str) {
+			if (str.indexOf('(') >= 0) str = str.slice(0, str.indexOf('('));
+			return str;
+		}
 		d3.csv('data/asoiaf-book1-edges.csv', function(error, dataLink) {
+			dataLink.forEach(function(d) {
+				d.Target = split(d.Target);
+				d.Source = split(d.Source);
+			});
 			d3.csv("data/asoiaf-book1-nodes.csv", function(errNode, dataNode) {
+				dataNode.forEach(function(d) {
+					d.Id = split(d.Id);
+				});
+				//console.log
 				var matrix_list = [];
 				var transform = {
 					x: 0.0,
@@ -53,14 +66,16 @@
 				};
 				
 				var m = new Matrix(0);
-				m.create(['Aemon-Targaryen-(Maester-Aemon)', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
+				m.create(['Aemon-Targaryen-', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
 				matrix_list.push(m);
 				
 				for (var i in matrix_list) matrix_list[i].render();
 				draw_force(m.nodes, width, height, dataLink, dataNode, transform, svg);
 
 				Lasso(svg);
-
+				var paths = new Paths();
+				paths.Create(m.nodes, matrix_list, dataNode, dataLink);
+				paths.Render();
 				// var slider = document.getElementById("myRange");
 				// var output = document.getElementById("demo");
 				// output.innerHTML = slider.value; // Display the default slider value
@@ -73,6 +88,7 @@
 			//suggest I have a list of m
 			});
 		});
+		
 		</script>
 	</div>
 	
