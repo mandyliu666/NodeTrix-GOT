@@ -1,6 +1,6 @@
 
 // semantic zoom, not geometric zoom
-function Zoom(zoomArea, link, node, label, trans, threshold, simulation) {
+function Zoom(zoomArea, transformArea, link, node, label, trans, threshold, simulation) {
 	// var links = d3.selectAll("line");
 	// links.transition().duration(200).attr("transform", transform(d3.zoomIdentity));
 	// var nodes = d3.selectAll("circle");

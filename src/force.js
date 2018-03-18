@@ -1,4 +1,4 @@
-function draw_force(matrix_nodes, networkWidth, networkHeight, dataLink, dataNode, trans, svg) {
+function draw_force(matrix_nodes, networkWidth, networkHeight, dataLink, dataNode, trans, svg, flayer) {
 		var networkplot = d3.select('#force');
 		var dataLinks = [];
 		var dataNodes = [];
@@ -140,7 +140,7 @@ function draw_force(matrix_nodes, networkWidth, networkHeight, dataLink, dataNod
 				.attr("y", function(d) { return d.y+3; });
 		}
 
-		Zoom(svg, link, node, label, trans, threshold, simulation);
+		Zoom(svg, flayer, link, node, label, trans, threshold, simulation);
 
 		function highlight(node, state) {
 

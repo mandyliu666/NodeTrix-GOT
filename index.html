@@ -59,7 +59,7 @@
 				matrix_list.push(m);
 				
 				for (var i in matrix_list) matrix_list[i].render();
-				draw_force(m.nodes, width, height, dataLink, dataNode, transform, svg);
+				draw_force(m.nodes, width, height, dataLink, dataNode, transform, svg, force_layer);
 
 				Lasso(svg);
 
