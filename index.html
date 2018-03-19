@@ -70,7 +70,6 @@
 				var paths = new Paths();
 				m.Create(['Aemon-Targaryen-', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
 				matrix_list.push(m);
-
 				dataNode.forEach(function(d) {
 					d.id = d.Id;
 					d.label = d.Label;
@@ -80,7 +79,6 @@
 						dataNodes.push(d);
 					}
 				});
-
 				dataLink.forEach(function(d) {
 					d.weight = +d.weight;
 					d.source = d.Source;
@@ -93,57 +91,31 @@
 						dataLinks.push(d);
 					}
 				});
-
 				dataNodes = dataNodes.filter(function(d) {
 					return nodeWeight[d.id] >= 3;
 				});
-
 				dataLinks = dataLinks.filter(function(d) {
 					return nodeWeight[d.source] >= 3 && nodeWeight[d.target] >= 3;
 				});
 				
 				for (var i in matrix_list) matrix_list[i].Render();
 				//draw_force(width, height, dataLinks, dataNodes, transform, svg, force_layer);
-
 				
 				var graph = new Graph(paths);
 				graph.create(width, height, dataLinks, dataNodes, neighbors, nodeWeight, transform);
-
-				var z = new Zoom(svg, transform);
-				z.bind();
-
+				
 				var l = new Lasso();
 				l.bind();
 				
-				paths.Create(m.nodes, matrix_list, dataNode, dataLink);
-				paths.Render();				
+				var z = new Zoom(svg, transform);
 				
-
-				d3.select('body')
-					.on("keydown", function() {
-						if(d3.event.shiftKey) {
-							 if(l.available) return;
-							else {
-							 	l.available = true;
-								z.unbind();
-								l.bind();
-								//svg.call(l.lasso);
-							}
-						}
-					})
-					.on("keyup", function() {
-						//l.unbind();
-						z.bind();
-					});
+				paths.Create(m.nodes, matrix_list, dataNode, dataLink);
+				paths.Render();			
 			
-
-
-
 				
 				// var slider = document.getElementById("myRange");
 				// var output = document.getElementById("demo");
 				// output.innerHTML = slider.value; // Display the default slider value
-
 				// // Update the current slider value (each time you drag the slider handle)
 				// slider.oninput = function() {
 				//     output.innerHTML = this.value;
