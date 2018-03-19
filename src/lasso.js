@@ -43,7 +43,7 @@ Lasso.prototype.bind = function () {
 
 		    // update graph and matrix
 		    var selected = lasso.selectedItems;
-		    Graph.update()
+		    //Graph.update(selected, );
 		    console.log(lasso.selectedItems);
 	};
  
