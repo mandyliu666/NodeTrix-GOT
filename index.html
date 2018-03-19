@@ -74,7 +74,7 @@
 						.attr('id', 'mainsvg')
 						.attr('width', width)
 						.attr('height', height);
-
+					
 					// remove previous graphs
 					d3.selectAll("#matrix > *").remove();
 					d3.selectAll("#force > *").remove();
@@ -88,7 +88,8 @@
 					paths = new Paths();
 					matrix_list = [];
 					matrix_nodes = [];
-
+					originData = dataLink;
+					
 					var transform = {
 						x: 0.0,
 						y: 0.0,
@@ -101,13 +102,9 @@
 					var neighbors = {};
 					
 					//var paths = new Paths();
-					var m = new Matrix(0);
-					m.Create(['Aemon-Targaryen-', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
-					matrix_list.push(m);
+					var m = new Matrix(100, 100);
+					m.Create([split('Aemon-Targaryen-(sdfas)'), 'Jon-Snow', 'Eddard-Stark','Aggo']);
 					
-					for (var i in matrix_list) 
-						for (var j in matrix_list[i].nodes) 
-							matrix_nodes.push(matrix_list[i].nodes[j]);
 					dataNode.forEach(function(d) {
 						d.id = d.Id;
 						d.label = d.Label;
@@ -138,19 +135,19 @@
 					});
 					
 					for (var i in matrix_list) matrix_list[i].Render();
-					//draw_force(width, height, dataLinks, dataNodes, transform, svg, force_layer);
-					
 					//var graph = new Graph();
 					graph.create(dataLinks, dataNodes, neighbors, nodeWeight, transform);
+					paths.Create(dataLink);		
+					m.Push('Harwin');
 					
+					var mm = new Matrix(100, 300);
+					mm.Create(['Drogo', 'Robert-Baratheon']);
 					var l = new Lasso();
 					l.bind();
 					
 					var z = new Zoom(svg, transform);
 					
-					paths.Create(dataNode, dataLink);
-					paths.Render();			
-				
+					
 					
 					// var slider = document.getElementById("myRange");
 					// var output = document.getElementById("demo");
@@ -166,6 +163,7 @@
 		}
 		var split = function(str) {
 			if (str.indexOf('(') >= 0) str = str.slice(0, str.indexOf('('));
+			if (str.charAt(str.length-1) == '-') str = str.slice(0, str.length-1);
 			return str;
 		}
 
