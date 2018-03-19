@@ -62,7 +62,7 @@
 					var force_layer = svg.append('g').attr('id', 'force');
 					var path_layer = svg.append('g').attr('id', 'path');
 					//initialize
-					graph = new Graph();
+					graph = new Graph(width, height);
 					paths = new Paths();
 					matrix_list = [];
 					matrix_nodes = [];
@@ -119,7 +119,7 @@
 					//draw_force(width, height, dataLinks, dataNodes, transform, svg, force_layer);
 					
 					//var graph = new Graph();
-					graph.create(width, height, dataLinks, dataNodes, neighbors, nodeWeight, transform);
+					graph.create(dataLinks, dataNodes, neighbors, nodeWeight, transform);
 					
 					var l = new Lasso();
 					l.bind();

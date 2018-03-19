@@ -10,36 +10,41 @@ Lasso.prototype.bind = function () {
 	var lassostarted = function() {
 			lasso.items()
 		    	//.attr("fill", "#bbb")
-		    	.classed("notpossible",true)
-		        .classed("selected",false);
+		    	.classed("notpossible", true)
+		        .classed("selected", false);
 	};
 
 	var lassodraw = function() {
 	    	// Style the possible dots
 			lasso.possibleItems()
-			    .classed("notpossible",false)
-			    .classed("possible",true);
+			    .classed("notpossible", false)
+			    .classed("possible", true);
 
 			// Style the not possible dot
 			lasso.notPossibleItems()
-			    .classed("notpossible",true)
-			    .classed("possible",false);
+			    .classed("notpossible", true)
+			    .classed("possible", false);
 	};
 
 	var lassoended = function() {
 			// Reset the color of all dots
 		    lasso.items()
-		        .classed("notpossible",false)
-		        .classed("possible",false);
+		        .classed("notpossible", false)
+		        .classed("possible", false);
 
 			// Style the selected dots
 		    lasso.selectedItems()
-		        .classed("selected",true)
-		        .attr("fill", "red");
+		        .classed("selected", true);
+		        //.attr("fill", "red");
 
 		    // Reset the style of the not selected dots
-		    lasso.notSelectedItems()
-		        .attr("fill", "#bbb");
+		    // lasso.notSelectedItems()
+		    //     .attr("fill", "#bbb");
+
+		    // update graph and matrix
+		    var selected = lasso.selectedItems;
+		    Graph.update()
+		    console.log(lasso.selectedItems);
 	};
  
 	var lasso = this.lasso
