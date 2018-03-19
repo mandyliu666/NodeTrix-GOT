@@ -30,104 +30,148 @@
 			<div id="nodeSlider">
 				<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
 			</div>
+			<div id="colorLegend"></div>
 		</div>
 		<div id="networkPlot"></div>
 		<script>
 		var margin = {top: 0, right: 0, bottom: 0, left: 0},
 		width = 900 - margin.left - margin.right,
 		height = 600 - margin.top - margin.bottom;
-		var svg = d3.select('#networkPlot')
-					.append('svg')
-					.attr('id', 'mainsvg')
-					.attr('width', width)
-					.attr('height', height);
-		//console.log(d3.select('#mainsvg'));
-		var matrix_layer = svg.append('g').attr('id', 'matrix');
-		var force_layer = svg.append('g').attr('id', 'force');
-		var path_layer = svg.append('g').attr('id', 'path');
-		d3.csv('data/asoiaf-book1-edges.csv', function(error, dataLink) {
-			dataLink.forEach(function(d) {
-				d.Target = split(d.Target);
-				d.Source = split(d.Source);
-			});
-			d3.csv("data/asoiaf-book1-nodes.csv", function(errNode, dataNode) {
-				dataNode.forEach(function(d) {
-					d.Id = split(d.Id);
-				});
-				//console.log
-				var matrix_list = [];
-				var transform = {
-					x: 0.0,
-					y: 0.0,
-					k: 1.0
-				};
-				var threshold = 2;
-				var dataLinks = [];
-				var dataNodes = [];
-				var nodeWeight = {};
-				var neighbors = {};
-				var m = new Matrix(0);
-				var paths = new Paths();
-				m.Create(['Aemon-Targaryen-', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
-				matrix_list.push(m);
-				dataNode.forEach(function(d) {
-					d.id = d.Id;
-					d.label = d.Label;
-					nodeWeight[d.id] = 0;
-					neighbors[d.id] = [];
-					if (m.nodes.indexOf(d.Id) < 0) {
-						dataNodes.push(d);
-					}
-				});
+		
+		function visualize(booknumber) {
+			d3.csv(('data/asoiaf-book' + booknumber + '-edges.csv'), function(error, dataLink) {
 				dataLink.forEach(function(d) {
-					d.weight = +d.weight;
-					d.source = d.Source;
-					d.target = d.Target;
-					nodeWeight[d.source]++;
-					nodeWeight[d.target]++;
-					neighbors[d.source].push(d.target);
-					neighbors[d.target].push(d.source);
-					if(m.nodes.indexOf(d.source)<0 && m.nodes.indexOf(d.target)<0) { 
-						dataLinks.push(d);
-					}
+					d.Target = split(d.Target);
+					d.Source = split(d.Source);
 				});
-				dataNodes = dataNodes.filter(function(d) {
-					return nodeWeight[d.id] >= 3;
+				d3.csv(("data/asoiaf-book" + booknumber + "-nodes.csv"), function(errNode, dataNode) {
+
+					var svg = d3.select('#networkPlot')
+						.append('svg')
+						.attr('id', 'mainsvg')
+						.attr('width', width)
+						.attr('height', height);
+
+					// remove previous graphs
+					svg.select("#matrix").remove();
+					svg.select("#force").remove();
+					svg.select("#path").remove();
+
+					var matrix_layer = svg.append('g').attr('id', 'matrix');
+					var force_layer = svg.append('g').attr('id', 'force');
+					var path_layer = svg.append('g').attr('id', 'path');
+
+					dataNode.forEach(function(d) {
+						d.Id = split(d.Id);
+					});
+
+					var matrix_list = [];
+					var transform = {
+						x: 0.0,
+						y: 0.0,
+						k: 1.0
+					};
+					var threshold = 2;
+					var dataLinks = [];
+					var dataNodes = [];
+					var nodeWeight = {};
+					var neighbors = {};
+					var m = new Matrix(0);
+					var paths = new Paths();
+					m.Create(['Aemon-Targaryen-', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
+					matrix_list.push(m);
+					dataNode.forEach(function(d) {
+						d.id = d.Id;
+						d.label = d.Label;
+						d.fam = d.Family;
+						nodeWeight[d.id] = 0;
+						neighbors[d.id] = [];
+						if (m.nodes.indexOf(d.Id) < 0) {
+							dataNodes.push(d);
+						}
+					});
+					dataLink.forEach(function(d) {
+						d.weight = +d.weight;
+						d.source = d.Source;
+						d.target = d.Target;
+						nodeWeight[d.source]++;
+						nodeWeight[d.target]++;
+						neighbors[d.source].push(d.target);
+						neighbors[d.target].push(d.source);
+						if(m.nodes.indexOf(d.source)<0 && m.nodes.indexOf(d.target)<0) { 
+							dataLinks.push(d);
+						}
+					});
+					dataNodes = dataNodes.filter(function(d) {
+						return nodeWeight[d.id] >= 3;
+					});
+					dataLinks = dataLinks.filter(function(d) {
+						return nodeWeight[d.source] >= 3 && nodeWeight[d.target] >= 3;
+					});
+					
+					for (var i in matrix_list) matrix_list[i].Render();
+					//draw_force(width, height, dataLinks, dataNodes, transform, svg, force_layer);
+					
+					var graph = new Graph(paths);
+					graph.create(width, height, dataLinks, dataNodes, neighbors, nodeWeight);
+					
+					var l = new Lasso();
+					l.bind();
+					
+					var z = new Zoom(svg, transform);
+					
+					paths.Create(m.nodes, matrix_list, dataNode, dataLink);
+					paths.Render();			
+				
+					
+					// var slider = document.getElementById("myRange");
+					// var output = document.getElementById("demo");
+					// output.innerHTML = slider.value; // Display the default slider value
+					// // Update the current slider value (each time you drag the slider handle)
+					// slider.oninput = function() {
+					//     output.innerHTML = this.value;
+					// }
+				
+				//suggest I have a list of m
 				});
-				dataLinks = dataLinks.filter(function(d) {
-					return nodeWeight[d.source] >= 3 && nodeWeight[d.target] >= 3;
-				});
-				
-				for (var i in matrix_list) matrix_list[i].Render();
-				//draw_force(width, height, dataLinks, dataNodes, transform, svg, force_layer);
-				
-				var graph = new Graph(paths);
-				graph.create(width, height, dataLinks, dataNodes, neighbors, nodeWeight, transform);
-				
-				var l = new Lasso();
-				l.bind();
-				
-				var z = new Zoom(svg, transform);
-				
-				paths.Create(m.nodes, matrix_list, dataNode, dataLink);
-				paths.Render();			
-			
-				
-				// var slider = document.getElementById("myRange");
-				// var output = document.getElementById("demo");
-				// output.innerHTML = slider.value; // Display the default slider value
-				// // Update the current slider value (each time you drag the slider handle)
-				// slider.oninput = function() {
-				//     output.innerHTML = this.value;
-				// }
-			
-			//suggest I have a list of m
 			});
-		});
+
+		}
 		var split = function(str) {
 			if (str.indexOf('(') >= 0) str = str.slice(0, str.indexOf('('));
 			return str;
 		}
+
+		visualize(1);
+
+		var options = [
+			{ "value": 1, "text": "I: A Game of Thrones" },
+			{ "value": 2, "text": "II: A Clash of Kings" },
+			{ "value": 3, "text": "III: A Storm of Swords" },
+			{ "value": 4, "text": "IV: A Feast for Crows" },
+			{ "value": 5, "text": "V: A Dance with Dragons" }
+		];
+
+		var dropdown = d3.select("#bookSelector");
+
+		dropdown
+			.append("select")
+			.selectAll("option")
+	        .data(options)
+	        .enter()
+	        .append("option")
+	        .attr("value", function(d){
+	            return d["value"];
+	        })
+	        .text(function(d){
+	            return d["text"];
+	        });
+
+	    dropdown
+	    	.on("change", function() {
+	    		var num = d3.event.target.value;
+	    		visualize(num);
+	    	});
 		</script>
 	</div>
 	

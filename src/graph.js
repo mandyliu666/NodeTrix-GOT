@@ -3,9 +3,21 @@ function Graph(paths) {
 	this.svg = d3.select("#mainsvg");
 	this.threshold = 2;
 	this.paths = paths;
+	this.colorlegend = {
+		"Stark": "#635e51",
+		//"Tully": "",
+		"Arryn": "#3d4e99",
+		"Lannister": "#ebda58",
+		"Greyjoy": "#3b394d",
+		"Martell": "#c45302",
+		"Baratheon": "#8c4054",
+		"Targaryen": "#960702",
+		//"Frey": "",
+		"Tyrell": "#4e7524"
+	};
 }
 
-Graph.prototype.create = function (w, h, links, nodes, neighbors, weights, trans) {
+Graph.prototype.create = function (w, h, links, nodes, neighbors, weights) {
 	var _this = this;
 	var network = this.layer.append("g");
 	var link = network.append("g")
@@ -23,7 +35,12 @@ Graph.prototype.create = function (w, h, links, nodes, neighbors, weights, trans
 		.enter().append("circle")
 		.attr("r", function(d) { return Math.sqrt(weights[d.id] + 10); })
 		.attr("id", function(d) { return "n" + d.id; })
-		.attr("fill", "#bbb")
+		.attr("fill", function(d) {
+			var familyname = d.fam;
+			if(this.colorlegend.includes(familyname)) {
+				return colorlegend[familyname];
+			} else return "#bbb";
+		})
 		.attr('pointer-events', 'all')
 		.on("mouseover", function(d) { highlight(d, true); })
 		.on("mouseout", function(d) { highlight(d, false); })

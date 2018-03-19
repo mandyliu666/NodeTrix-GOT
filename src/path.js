@@ -106,6 +106,7 @@ Paths.prototype.Render = function() {
 					.attr('d', function(d) {return line(_this.generate(d));})
 					.attr('stroke', 'grey')
 					.attr('stroke-width', 1)
+					.attr('opacity', 0.6)
 					.attr('fill', 'none');
 }
 

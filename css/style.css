@@ -56,6 +56,7 @@ body p {
 
 circle {
     cursor: crosshair;
+    fill: #bbb;
 }
 
 circle.level1 {
@@ -74,13 +75,12 @@ circle.level3 {
 }
 
 circle.sibling {
-    /*fill: blue;*/
-    fill: blue;
+/*    fill: blue;*/
+    opacity: 0.8;
 }
 
 circle.main {
-    /*fill: red;*/
-    fill: red;
+/*    fill: red;*/
     fill-opacity: 1.0;
 }
 
@@ -88,6 +88,7 @@ g.labels {
 	font-weight: normal;
 	visibility: hidden;
 	font-size: 10px;
+    text-shadow: 0px 2px #fff;
 }
 
 .label.on {
@@ -121,16 +122,19 @@ text.on {
     fill-opacity:.5;
 }
 
-.not_possible {
+.notpossible {
     /*fill: rgb(200,200,200);*/
+    opacity: 0.6;
 }
 
 .possible {
-    fill: yellow;
+    /*fill: yellow;*/
+    opacity: 0.8;
 }
 
 .selected {
-    fill: green;
+    /*fill: green;*/
+    opacity: 1;
 }
 
 #nodeSlider {
@@ -173,6 +177,13 @@ text.on {
     border-radius: 50%;
     background: black;
     cursor: pointer;
+}
+
+#bookSelector {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
 }
 
 
