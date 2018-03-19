@@ -14,7 +14,6 @@
 	<script src="src/zoom.js" charset="utf-8"></script>
 	<script src='src/matrix.js' charset='utf-8'></script>
 	<script src='src/graph.js' charset='utf-8'></script>
-<!-- 	<script src='src/force.js' charset='utf-8'></script> -->
 	<script src="src/path.js" charset="utf-8"></script>
 	<script src="lib/d3-tip.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -38,13 +37,16 @@
 		width = 900 - margin.left - margin.right,
 		height = 600 - margin.top - margin.bottom;
 		function visualize(booknumber) {
+			d3.selectAll("#networkPlot > *").remove();
 			d3.csv(('data/asoiaf-book' + booknumber + '-edges.csv'), function(error, dataLink) {
 				dataLink.forEach(function(d) {
 					d.Target = split(d.Target);
 					d.Source = split(d.Source);
 				});
 				d3.csv(("data/asoiaf-book" + booknumber + "-nodes.csv"), function(errNode, dataNode) {
-
+					dataNode.forEach(function(d) {
+						d.Id = split(d.Id);
+					});
 					var svg = d3.select('#networkPlot')
 						.append('svg')
 						.attr('id', 'mainsvg')
@@ -52,19 +54,19 @@
 						.attr('height', height);
 
 					// remove previous graphs
-					svg.select("#matrix > *").remove();
-					svg.select("#force > *").remove();
-					svg.select("#path > *").remove();
+					d3.selectAll("#matrix > *").remove();
+					d3.selectAll("#force > *").remove();
+					d3.selectAll("#path > *").remove();
 
 					var matrix_layer = svg.append('g').attr('id', 'matrix');
 					var force_layer = svg.append('g').attr('id', 'force');
 					var path_layer = svg.append('g').attr('id', 'path');
+					//initialize
+					graph = new Graph();
+					paths = new Paths();
+					matrix_list = [];
+					matrix_nodes = [];
 
-					dataNode.forEach(function(d) {
-						d.Id = split(d.Id);
-					});
-
-					var matrix_list = [];
 					var transform = {
 						x: 0.0,
 						y: 0.0,
@@ -75,17 +77,22 @@
 					var dataNodes = [];
 					var nodeWeight = {};
 					var neighbors = {};
-					var paths = new Paths();
-					var m = new Matrix(0, paths);
+					
+					//var paths = new Paths();
+					var m = new Matrix(0);
 					m.Create(['Aemon-Targaryen-', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
 					matrix_list.push(m);
+					
+					for (var i in matrix_list) 
+						for (var j in matrix_list[i].nodes) 
+							matrix_nodes.push(matrix_list[i].nodes[j]);
 					dataNode.forEach(function(d) {
 						d.id = d.Id;
 						d.label = d.Label;
 						d.fam = d.Family;
 						nodeWeight[d.id] = 0;
 						neighbors[d.id] = [];
-						if (m.nodes.indexOf(d.Id) < 0) {
+						if (matrix_nodes.indexOf(d.Id) < 0) {
 							dataNodes.push(d);
 						}
 					});
@@ -97,7 +104,7 @@
 						nodeWeight[d.target]++;
 						neighbors[d.source].push(d.target);
 						neighbors[d.target].push(d.source);
-						if(m.nodes.indexOf(d.source)<0 && m.nodes.indexOf(d.target)<0) { 
+						if(matrix_nodes.indexOf(d.source)<0 && matrix_nodes.indexOf(d.target)<0) { 
 							dataLinks.push(d);
 						}
 					});
@@ -111,7 +118,7 @@
 					for (var i in matrix_list) matrix_list[i].Render();
 					//draw_force(width, height, dataLinks, dataNodes, transform, svg, force_layer);
 					
-					var graph = new Graph(paths);
+					//var graph = new Graph();
 					graph.create(width, height, dataLinks, dataNodes, neighbors, nodeWeight);
 					
 					var l = new Lasso();
@@ -119,7 +126,7 @@
 					
 					var z = new Zoom(svg, transform);
 					
-					paths.Create(m.nodes, matrix_list, dataNode, dataLink);
+					paths.Create(dataNode, dataLink);
 					paths.Render();			
 				
 					

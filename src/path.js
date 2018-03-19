@@ -1,14 +1,16 @@
 function Paths() {
 	this.data = [];
-	this.locallayer = d3.select('#path');
 	this.num = 0;
 }
 
 Paths.prototype.outDist = 20;
 	
-Paths.prototype.Create = function(matrix_nodes, matrix_list, dataNode, dataLink) {
+Paths.prototype.Create = function(dataNode, dataLink) {
+	this.data = [];
+	this.num = 0;
 	var _this = this;
-	this.matrix_list = matrix_list;
+	this.locallayer = d3.select('#path');
+	//this.matrix_list = matrix_list;
 	//var zoom = new Zoom(d3.select('#mainsvg'), _this.locallayer, trans);
 	dataLink.forEach(function(d) {	
 		var in_matrix, in_force;
@@ -56,13 +58,12 @@ Paths.prototype.Create = function(matrix_nodes, matrix_list, dataNode, dataLink)
 }
 
 Paths.prototype.UpdateData = function() {  //update existing data 
-	var _this = this;
 	this.data.forEach(function(d) { //rearrange
 		var matrix;
 		var num;
-		for (var i in _this.matrix_list) if (_this.matrix_list[i].nodes.indexOf(d.matrix_id) >= 0) { //find the matrix and num
-			matrix = _this.matrix_list[i];
-			num = _this.matrix_list[i].nodes.indexOf(d.matrix_id);
+		for (var i in matrix_list) if (matrix_list[i].nodes.indexOf(d.matrix_id) >= 0) { //find the matrix and num
+			matrix = matrix_list[i];
+			num = matrix_list[i].nodes.indexOf(d.matrix_id);
 			break;
 		}
 		d.pos0.x = matrix.x+num*matrix.unitsize+matrix.unitsize/2;
@@ -82,11 +83,6 @@ Paths.prototype.Delete = function(id) {
 	for (var i=this.data.length-1;i>=0;i--) if (this.data[i].matrix_id == id) this.data.splice(i, 1); //delete data that won't be used
 	this.UpdateData();
 	this.Update();
-}
-
-Paths.prototype.Push = function(id) {
-	
-	
 }
 
 Paths.prototype.generate = function(d) {
@@ -153,3 +149,4 @@ Paths.prototype.Update = function() {
 					.attr('d', function(d) {return line(_this.generate(d));});
 };
 
+var paths = new Paths();

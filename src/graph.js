@@ -1,8 +1,6 @@
-function Graph(paths) {
-	this.layer = d3.select("#force");
-	this.svg = d3.select("#mainsvg");
+function Graph() {
 	this.threshold = 2;
-	this.paths = paths;
+	//this.paths = paths;
 	this.colorlegend = {
 		"Stark": "#635e51",
 		//"Tully": "",
@@ -18,6 +16,8 @@ function Graph(paths) {
 }
 
 Graph.prototype.create = function (w, h, links, nodes, neighbors, weights) {
+	this.layer = d3.select("#force");
+	this.svg = d3.select("#mainsvg");
 	var _this = this;
 	var network = this.layer.append("g");
 	var link = network.append("g")
@@ -119,7 +119,7 @@ Graph.prototype.create = function (w, h, links, nodes, neighbors, weights) {
 			    
 		node
 			.attr("cx", function(d) { 
-				_this.paths.data.forEach(function(dd) {
+				paths.data.forEach(function(dd) {
 					//console.log(dd);
 					if (dd.force_id == d.id) {
 						dd.pos_end.x = d.x;
@@ -133,7 +133,7 @@ Graph.prototype.create = function (w, h, links, nodes, neighbors, weights) {
 		label
 			.attr("x", function(d) { return d.x+10; })
 			.attr("y", function(d) { return d.y+3; });
-		_this.paths.Update();
+		paths.Update();
 		
 		//d3.selectAll('.p'+nownode)
 		//	.forEach(function)
@@ -174,3 +174,4 @@ Graph.prototype.update = function () {
 
 }
 
+var graph = new Graph();
