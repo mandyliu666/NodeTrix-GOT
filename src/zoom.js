@@ -44,3 +44,4 @@ Zoom.prototype.bind = function () {
 
 Zoom.prototype.unbind = function () {
 	this.svg.on(".zoom", null); 
+}
