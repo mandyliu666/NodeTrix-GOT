@@ -17,6 +17,7 @@ Matrix.prototype.fontsize = 10;
 //Matrix.prototype.insert
 Matrix.prototype.create = function(node, data) {
 	var _this = this;
+	//var zoom = new Zoom(d3.select('#mainsvg'), _this.locallayer, trans);
 	for (var i in node) this.nodes.push(node[i]);
 	this.num_nodes = node.length;
 	//console.log(data);

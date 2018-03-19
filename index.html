@@ -67,9 +67,9 @@
 				var nodeWeight = {};
 				var neighbors = {};
 				var m = new Matrix(0);
+				var paths = new Paths();
 				m.create(['Aemon-Targaryen-', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
 				matrix_list.push(m);
-
 				dataNode.forEach(function(d) {
 					d.id = d.Id;
 					d.label = d.Label;
@@ -79,7 +79,6 @@
 						dataNodes.push(d);
 					}
 				});
-
 				dataLink.forEach(function(d) {
 					d.weight = +d.weight;
 					d.source = d.Source;
@@ -92,59 +91,31 @@
 						dataLinks.push(d);
 					}
 				});
-
 				dataNodes = dataNodes.filter(function(d) {
 					return nodeWeight[d.id] >= 3;
 				});
-
 				dataLinks = dataLinks.filter(function(d) {
 					return nodeWeight[d.source] >= 3 && nodeWeight[d.target] >= 3;
 				});
 				
 				for (var i in matrix_list) matrix_list[i].render();
 				//draw_force(width, height, dataLinks, dataNodes, transform, svg, force_layer);
-				var graph = new Graph();
+				
+				var graph = new Graph(paths);
 				graph.create(width, height, dataLinks, dataNodes, neighbors, nodeWeight, transform);
-
-
+				
 				var l = new Lasso();
 				l.bind();
-				var z = new Zoom(svg, force_layer, transform);
-				//z.unbind();
-
 				
-
-				//var l = new Lasso();
-				//l.bind();
-
-				// var elementz = z;
-				// var elementl = l;
-				// d3.select('body')
-				// 	.on("keydown", function() {
-				// 		if(d3.event.shiftKey) {
-				// 			elementz.unbind();
-				// 			elementl.bind();
-				// 		}
-				// 	})
-				// 	.on("keyup", function() {
-				// 		var newz = new Zoom(svg, force_layer, transform);
-				// 		newz.bind();
-				// 		elementz = newz;
-				// 		var newl = new Lasso();
-				// 		elementl = newl;
-				// 	});
-			
-
-
-
-				var paths = new Paths();
+				var z = new Zoom(svg, transform);
+				
 				paths.Create(m.nodes, matrix_list, dataNode, dataLink);
-				paths.Render();
-
+				paths.Render();			
+			
+				
 				// var slider = document.getElementById("myRange");
 				// var output = document.getElementById("demo");
 				// output.innerHTML = slider.value; // Display the default slider value
-
 				// // Update the current slider value (each time you drag the slider handle)
 				// slider.oninput = function() {
 				//     output.innerHTML = this.value;
