@@ -42,9 +42,14 @@ Lasso.prototype.bind = function () {
 		    //     .attr("fill", "#bbb");
 
 		    // update graph and matrix
-		    var selected = lasso.selectedItems;
-		    //Graph.update(selected, );
-		    console.log(lasso.selectedItems);
+		    var selected = lasso.selectedItems()["_groups"][0];
+		    var newNodes = {};
+		    selected.forEach(function (d) {
+		    	var id = d3.select(d).attr("id").substring(1);
+		    	newNodes[id] = 1;
+		    });
+		    //Graph.update(newNodes, trans);
+
 	};
  
 	var lasso = this.lasso

@@ -1,26 +1,23 @@
-function Graph(w, h) {
+function Graph(w, h, legend) {
 	this.threshold = 2;
 	//this.paths = paths;
-	this.colorlegend = {
-		"Stark": "#635e51",
-		//"Tully": "",
-		"Arryn": "#3d4e99",
-		"Lannister": "#ebda58",
-		"Greyjoy": "#3b394d",
-		"Martell": "#c45302",
-		"Baratheon": "#8c4054",
-		"Targaryen": "#960702",
-		//"Frey": "",
-		"Tyrell": "#4e7524"
-	};
+	this.colorlegend = legend;
 	this.w = w;
 	this.h = h;
+	this.nodes = [];
+	this.links = [];
+	this.neighbors = {};
+	this.weights = {};
 }
 
 
 Graph.prototype.create = function (links, nodes, neighbors, weights, trans) {
 	this.layer = d3.select("#force");
 	this.svg = d3.select("#mainsvg");
+	this.nodes = nodes;
+	this.links = links;
+	this.neighbors = neighbors;
+	this.weights = weights;
 	var _this = this;
 	var network = this.layer.append("g")
 		.attr("id", "networklayer");
@@ -134,6 +131,7 @@ Graph.prototype.create = function (links, nodes, neighbors, weights, trans) {
 		label
 			.attr("x", function(d) { return d.x+10; })
 			.attr("y", function(d) { return d.y+3; });
+		
 		paths.Update();
 		
 		//d3.selectAll('.p'+nownode)
@@ -142,9 +140,29 @@ Graph.prototype.create = function (links, nodes, neighbors, weights, trans) {
 	}
 }
 
-Graph.prototype.update = function (links, nodes, neighbors, weights, trans) {
+Graph.prototype.update = function (ids, trans) {
 	d3.selectAll("#networklayer > *").remove();
 	var _this = this;
+
+	var nodes = [];
+	var links = [];
+	var neighbors = {};
+
+	this.nodes.forEach(function(d) {
+		if(ids[d.id] == null) {
+			nodes.push(d);
+			neighbors[d.id] = [];
+		}
+	});
+
+	this.links.forEach(function(d) {
+		if(ids[d.source] == null || ids[d.target] == null) {
+			links.push(d);
+			neighbors[d.source].push(d.target);
+			neighbors[d.target].push(d.source);
+		}
+	})
+
 	var network = this.layer.append("g")
 		.attr("id", "networklayer");
 	var link = network.append("g")
@@ -160,7 +178,7 @@ Graph.prototype.update = function (links, nodes, neighbors, weights, trans) {
 		.selectAll("circle")
 		.data(nodes)
 		.enter().append("circle")
-		.attr("r", function(d) { return Math.sqrt(weights[d.id] + 10); })
+		.attr("r", function(d) { return Math.sqrt(this.weights[d.id] + 10); })
 		.attr("id", function(d) { return "n" + d.id; })
 		.style("fill", function(d) {
 			var familyname = d.fam;
@@ -278,4 +296,3 @@ function parseId (id) {
 	} else return id;
 }
 
-var graph = new Graph(900, 600);

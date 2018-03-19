@@ -29,13 +29,35 @@
 			<div id="nodeSlider">
 				<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
 			</div>
-			<div id="colorLegend"></div>
+			<div id="colorLegend">
+				<input id="checkStark" type="checkbox">
+				<input id="checkArryn" type="checkbox">
+				<input id="checkLannister" type="checkbox">
+				<input id="checkGreyjoy" type="checkbox">
+				<input id="checkMartell" type="checkbox">
+				<input id="checkBaratheon" type="checkbox">
+				<input id="checkTargaryen" type="checkbox">
+				<input id="checkTyrell" type="checkbox">
+			</div>
 		</div>
 		<div id="networkPlot"></div>
 		<script>
 		var margin = {top: 0, right: 0, bottom: 0, left: 0},
 		width = 900 - margin.left - margin.right,
 		height = 600 - margin.top - margin.bottom;
+		var colorlegend = {
+			"Stark": "#635e51",
+			//"Tully": "",
+			"Arryn": "#3d4e99",
+			"Lannister": "#ebda58",
+			"Greyjoy": "#3b394d",
+			"Martell": "#c45302",
+			"Baratheon": "#8c4054",
+			"Targaryen": "#960702",
+			//"Frey": "",
+			"Tyrell": "#4e7524"
+		};
+		var graph = new Graph(width, height, colorlegend);
 		function visualize(booknumber) {
 			d3.selectAll("#networkPlot > *").remove();
 			d3.csv(('data/asoiaf-book' + booknumber + '-edges.csv'), function(error, dataLink) {
@@ -62,7 +84,7 @@
 					var force_layer = svg.append('g').attr('id', 'force');
 					var path_layer = svg.append('g').attr('id', 'path');
 					//initialize
-					graph = new Graph(width, height);
+					graph = new Graph(width, height, colorlegend);
 					paths = new Paths();
 					matrix_list = [];
 					matrix_nodes = [];

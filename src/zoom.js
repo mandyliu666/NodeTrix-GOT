@@ -4,8 +4,6 @@ function Zoom(zoomArea, trans) {
 	this.svg = d3.select("#mainsvg");
 	this.threshold = 2;
 
-//	this.zoom.scaleExtent([0.5, 3]).on("zoom", this.zoomed);
-
 	this.zoomed = function() {
 		zoomArea.select('#matrix').attr("transform", d3.event.transform);
 		zoomArea.select('#force').attr("transform", d3.event.transform);
@@ -18,6 +16,12 @@ function Zoom(zoomArea, trans) {
 		trans.k = k;
 	   	trans.x = x;
 	   	trans.y = y;
+
+	   	//See if we cross the 'show' threshold in either direction
+   		if(k >= this.threshold)
+			this.svg.selectAll("text").classed('on', true);
+   		else if(k < this.threshold)
+			this.svg.selectAll("text").classed('on', false);
 	};
 
 	this.zoom.scaleExtent([0.5, 3]).on("zoom", this.zoomed);
@@ -27,13 +31,6 @@ function Zoom(zoomArea, trans) {
 	
 
 	this.zoom(this.svg);
-
-
-	// See if we cross the 'show' threshold in either direction
-//    	if(k >= this.threshold)
-		// this.svg.selectAll("text").classed('on',true);
-//    	else if(k < this.threshold)
-		// this.svg.selectAll("text").classed('on',false);
 
 
 }
