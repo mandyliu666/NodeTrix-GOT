@@ -4,9 +4,9 @@ function Zoom(zoomArea, trans) {
 	this.svg = d3.select("#mainsvg");
 	this.threshold = 2;
 
-	this.zoom.scaleExtent([0.5, 3]).on("zoom", zoomed);
+//	this.zoom.scaleExtent([0.5, 3]).on("zoom", this.zoomed);
 
-	function zoomed() {
+	this.zoomed = function() {
 		zoomArea.select('#matrix').attr("transform", d3.event.transform);
 		zoomArea.select('#force').attr("transform", d3.event.transform);
 		zoomArea.select('#path').attr("transform", d3.event.transform);
@@ -20,17 +20,14 @@ function Zoom(zoomArea, trans) {
 	   	trans.y = y;
 	};
 
-	console.log(this.svg.on("mousedown.zoom"));
+	this.zoom.scaleExtent([0.5, 3]).on("zoom", this.zoomed);
 
-	this.mousedownZoom = this.svg.on("mousedown.zoom"); 
-	this.mousemoveZoom = this.svg.on("mousemove.zoom"); 
-	this.touchstartZoom = this.svg.on("touchstart.zoom");
-
-	this.svg.on("mousedown.zoom", null); 
-	this.svg.on("mousemove.zoom", null); 
-	this.svg.on("touchstart.zoom", null); 
+ 
+	this.svg.on(".zoom", null); 
+	
 
 	this.zoom(this.svg);
+
 
 	// See if we cross the 'show' threshold in either direction
 //    	if(k >= this.threshold)
@@ -42,13 +39,9 @@ function Zoom(zoomArea, trans) {
 }
 
 Zoom.prototype.bind = function () {
-	this.svg.on("mousedown.zoom", this.mousedownZoom);
-	this.svg.on("mousemove.zoom", this.mousemoveZoom); 
-	this.svg.on("touchstart.zoom", this.touchstartZoom);
+	this.svg.on(".zoom", this.zoomed); 
 };
 
 Zoom.prototype.unbind = function () {
-	this.svg.on("mousedown.zoom", null); 
-	this.svg.on("mousemove.zoom", null); 
-	this.svg.on("touchstart.zoom", null); 
+	this.svg.on(".zoom", null); 
 }

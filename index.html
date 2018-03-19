@@ -109,15 +109,8 @@
 				var graph = new Graph(paths);
 				graph.create(width, height, dataLinks, dataNodes, neighbors, nodeWeight, transform);
 
-				svg.on("keydown", function() {
-					if(key.shift) {
-						// unbind zoom
-						// bind lasso
-						//var lasso = new Lasso();
-					}
-				});
-
-				svg.on("mouse")
+				var z = new Zoom(svg, transform);
+				z.bind();
 
 				var l = new Lasso();
 				l.bind();
@@ -126,10 +119,27 @@
 				paths.Render();				
 				
 
-				//var zoom = new Zoom();
-				//zoom.create(svg, force_layer, transform);
+				d3.select('body')
+					.on("keydown", function() {
+						if(d3.event.shiftKey) {
+							 if(l.available) return;
+							else {
+							 	l.available = true;
+								z.unbind();
+								l.bind();
+								//svg.call(l.lasso);
+							}
+						}
+					})
+					.on("keyup", function() {
+						//l.unbind();
+						z.bind();
+					});
+			
 
-				Zoom(svg, transform);
+
+
+				
 				// var slider = document.getElementById("myRange");
 				// var output = document.getElementById("demo");
 				// output.innerHTML = slider.value; // Display the default slider value
