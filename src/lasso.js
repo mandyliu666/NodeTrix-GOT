@@ -41,11 +41,7 @@ Lasso.prototype.bind = function () {
 		    lasso.notSelectedItems()
 		        .attr("fill", "#bbb");
 	};
-
-	var doNothing = function() {
-
-	};
-	        
+ 
 	var lasso = this.lasso
 	    .closePathSelect(true)
 	    .closePathDistance(100)
@@ -55,10 +51,12 @@ Lasso.prototype.bind = function () {
 	    .on("draw", lassodraw)
 	    .on("end", lassoended);
 
-	this.svg.call(lasso);
+
+	this.svg.call(this.lasso);
 
 };
 
 Lasso.prototype.unbind = function () {
+
 
 }

@@ -106,26 +106,33 @@
 				var graph = new Graph();
 				graph.create(width, height, dataLinks, dataNodes, neighbors, nodeWeight, transform);
 
-				var z = new Zoom(svg, force_layer, transform);
-				z.bind();
 
 				var l = new Lasso();
-				d3.select('body')
-					.on("keydown", function() {
-						if(d3.event.shiftKey) {
-							 if(l.available) return;
-							else {
-							 	l.available = true;
-								z.unbind();
-								l.bind();
-								//svg.call(l.lasso);
-							}
-						}
-					})
-					.on("keyup", function() {
-						//l.unbind();
-						z.bind();
-					});
+				l.bind();
+				var z = new Zoom(svg, force_layer, transform);
+				//z.unbind();
+
+				
+
+				//var l = new Lasso();
+				//l.bind();
+
+				// var elementz = z;
+				// var elementl = l;
+				// d3.select('body')
+				// 	.on("keydown", function() {
+				// 		if(d3.event.shiftKey) {
+				// 			elementz.unbind();
+				// 			elementl.bind();
+				// 		}
+				// 	})
+				// 	.on("keyup", function() {
+				// 		var newz = new Zoom(svg, force_layer, transform);
+				// 		newz.bind();
+				// 		elementz = newz;
+				// 		var newl = new Lasso();
+				// 		elementl = newl;
+				// 	});
 			
 
 

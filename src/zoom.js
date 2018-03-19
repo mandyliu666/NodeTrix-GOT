@@ -5,6 +5,7 @@ function Zoom(zoomArea, transformArea, trans) {
 	this.threshold = 2;
 
 	this.zoomed = function () {
+		
 		transformArea.attr("transform", d3.event.transform);
 
 		var k = d3.event.transform.k;
@@ -25,6 +26,7 @@ function Zoom(zoomArea, transformArea, trans) {
 	this.zoom(this.svg);
 
 
+
 	// See if we cross the 'show' threshold in either direction
 //    	if(k >= this.threshold)
 		// this.svg.selectAll("text").classed('on',true);
@@ -36,6 +38,8 @@ function Zoom(zoomArea, transformArea, trans) {
 
 Zoom.prototype.bind = function () {
 	this.svg.on(".zoom", this.zoomed); 
+
+
 };
 
 Zoom.prototype.unbind = function () {
