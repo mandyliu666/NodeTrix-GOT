@@ -244,10 +244,10 @@ Graph.prototype.update = function (links, nodes, neighbors, weights, trans) {
 		label
 			.attr("x", function(d) { return d.x+10; })
 			.attr("y", function(d) { return d.y+3; });
-		paths.Update();
 		
-
-};
+		paths.Update();
+	}
+}
 
 function highlight(node, state, neighbors, trans) {
 
