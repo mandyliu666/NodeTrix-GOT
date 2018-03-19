@@ -10,26 +10,26 @@ Lasso.prototype.bind = function () {
 	var lassostarted = function() {
 			lasso.items()
 		    	//.attr("fill", "#bbb")
-		    	.classed("not_possible",true)
+		    	.classed("notpossible",true)
 		        .classed("selected",false);
 	};
 
 	var lassodraw = function() {
 	    	// Style the possible dots
 			lasso.possibleItems()
-			    .classed("not_possible",false)
+			    .classed("notpossible",false)
 			    .classed("possible",true);
 
 			// Style the not possible dot
 			lasso.notPossibleItems()
-			    .classed("not_possible",true)
+			    .classed("notpossible",true)
 			    .classed("possible",false);
 	};
 
 	var lassoended = function() {
 			// Reset the color of all dots
 		    lasso.items()
-		        .classed("not_possible",false)
+		        .classed("notpossible",false)
 		        .classed("possible",false);
 
 			// Style the selected dots

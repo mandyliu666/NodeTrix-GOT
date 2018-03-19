@@ -140,6 +140,7 @@ Paths.prototype.Render = function() {
 					.attr('stroke-width', 2)
 					.attr('fill', 'none')
 					.attr('stroke-opacity', 0.2);
+
 }
 
 Paths.prototype.Update = function() {
@@ -150,5 +151,5 @@ Paths.prototype.Update = function() {
 				.curve(d3.curveBasis);
 	this.locallayer.selectAll('path')
 					.attr('d', function(d) {return line(_this.generate(d));});
-}
+};
 
