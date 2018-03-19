@@ -113,5 +113,5 @@ Paths.prototype.Rerender = function() {
 				.curve(d3.curveBasis);
 	this.locallayer.selectAll('.stupidpaths')
 					.attr('d', function(d) {return line(_this.generate(d));});
-}
+};
 
