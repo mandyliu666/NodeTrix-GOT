@@ -15,7 +15,7 @@ Matrix.prototype.unitsize = 15;
 Matrix.prototype.fontsize = 10;
 
 //Matrix.prototype.insert
-Matrix.prototype.create = function(node, data) {
+Matrix.prototype.Create = function(node, data) {
 	var _this = this;
 	//var zoom = new Zoom(d3.select('#mainsvg'), _this.locallayer, trans);
 	for (var i in node) this.nodes.push(node[i]);
@@ -43,14 +43,34 @@ Matrix.prototype.create = function(node, data) {
 	}
 }
 
-Matrix.prototype.clear = function() {
+Matrix.prototype.Delete = function(id) { //delete id from one matrix
+	var _this = this;
+	var num = this.nodes.indexOf(id);
+	if (num >= 0) {
+		this.nodes.splice(num, 1);
+		for (var i in this.adj_matrix) this.adj_matrix[i].splice(num, 1);
+		this.adj_matrix.splice(num, 1);
+		//for (var i in this.edges)
+	}
+}
+
+Matrix.prototype.Push = function(id) {
+	var _this = this;
+	var num = this.nodes.indexOf(id);
+	if (num < 0) {
+		
+	}
+	
+}
+
+Matrix.prototype.Clear = function() {
 	this.num_nodes = 0;
 	this.num_edges = 0;
 	this.nodes = {};
 	this.edges = {};
 }
 
-Matrix.prototype.render = function() {
+Matrix.prototype.Render = function() {
 	var _this = this;
 	for (var i in this.nodes)
 		for (var j in this.nodes) {
@@ -73,3 +93,4 @@ Matrix.prototype.render = function() {
 						.style('font-size', '10px');
 	}				
 };
+

@@ -68,7 +68,7 @@
 				var neighbors = {};
 				var m = new Matrix(0);
 				var paths = new Paths();
-				m.create(['Aemon-Targaryen-', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
+				m.Create(['Aemon-Targaryen-', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
 				matrix_list.push(m);
 				dataNode.forEach(function(d) {
 					d.id = d.Id;
@@ -98,7 +98,7 @@
 					return nodeWeight[d.source] >= 3 && nodeWeight[d.target] >= 3;
 				});
 				
-				for (var i in matrix_list) matrix_list[i].render();
+				for (var i in matrix_list) matrix_list[i].Render();
 				//draw_force(width, height, dataLinks, dataNodes, transform, svg, force_layer);
 				
 				var graph = new Graph(paths);

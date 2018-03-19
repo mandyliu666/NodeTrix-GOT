@@ -53,7 +53,11 @@ Paths.prototype.Create = function(matrix_nodes, matrix_list, dataNode, dataLink)
 	});
 	//console.log(_this.data);
 }
+
+Paths.prototype.Delete = function() {
 	
+}
+
 Paths.prototype.generate = function(d) {
 	var _this = this;
 	var result = [];
@@ -103,8 +107,8 @@ Paths.prototype.Render = function() {
 					.attr('stroke', 'grey')
 					.attr('stroke-width', 1)
 					.attr('fill', 'none');
-		
-	}
+}
+
 Paths.prototype.Rerender = function() {
 	var _this = this;
 	var line = d3.line()
