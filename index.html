@@ -67,6 +67,7 @@
 				var nodeWeight = {};
 				var neighbors = {};
 				var m = new Matrix(0);
+				var paths = new Paths();
 				m.create(['Aemon-Targaryen-', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
 				matrix_list.push(m);
 
@@ -103,7 +104,9 @@
 				
 				for (var i in matrix_list) matrix_list[i].render();
 				//draw_force(width, height, dataLinks, dataNodes, transform, svg, force_layer);
-				var graph = new Graph();
+
+				
+				var graph = new Graph(paths);
 				graph.create(width, height, dataLinks, dataNodes, neighbors, nodeWeight, transform);
 
 				svg.on("keydown", function() {
@@ -118,17 +121,15 @@
 
 				var l = new Lasso();
 				l.bind();
-
 				
+				paths.Create(m.nodes, matrix_list, dataNode, dataLink);
+				paths.Render();				
 				
 
 				//var zoom = new Zoom();
 				//zoom.create(svg, force_layer, transform);
 
-				var paths = new Paths();
-				paths.Create(m.nodes, matrix_list, dataNode, dataLink);
-				paths.Render();
-
+				Zoom(svg, transform);
 				// var slider = document.getElementById("myRange");
 				// var output = document.getElementById("demo");
 				// output.innerHTML = slider.value; // Display the default slider value

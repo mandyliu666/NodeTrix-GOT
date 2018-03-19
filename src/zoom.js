@@ -1,4 +1,4 @@
-function Zoom(zoomArea, transformArea, trans) {
+function Zoom(zoomArea, trans) {
 	this.zoom = d3.zoom();
 	this.available = false;
 	this.svg = d3.select("#mainsvg");
@@ -7,7 +7,9 @@ function Zoom(zoomArea, transformArea, trans) {
 	this.zoom.scaleExtent([0.5, 3]).on("zoom", zoomed);
 
 	function zoomed() {
-		transformArea.attr("transform", d3.event.transform);
+		zoomArea.select('#matrix').attr("transform", d3.event.transform);
+		zoomArea.select('#force').attr("transform", d3.event.transform);
+		zoomArea.select('#path').attr("transform", d3.event.transform);
 
 		var k = d3.event.transform.k;
 		var x = d3.event.transform.x;

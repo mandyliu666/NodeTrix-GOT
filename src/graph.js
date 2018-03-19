@@ -1,10 +1,12 @@
-function Graph() {
+function Graph(paths) {
 	this.layer = d3.select("#force");
 	this.svg = d3.select("#mainsvg");
 	this.threshold = 2;
+	this.paths = paths;
 }
 
 Graph.prototype.create = function (w, h, links, nodes, neighbors, weights, trans) {
+	var _this = this;
 	var network = this.layer.append("g");
 	var link = network.append("g")
 		.attr("class", "links")
@@ -41,7 +43,8 @@ Graph.prototype.create = function (w, h, links, nodes, neighbors, weights, trans
 
 
 	var simulation = d3.forceSimulation()
-		.force("link", d3.forceLink().id(function(d) { return d.id; }).distance(function(d) { return 60; }))
+		.force("link", d3.forceLink().id(function(d) { return d.id; })
+		.distance(function(d) { return 60; }))
 		.force("charge", d3.forceManyBody())
 		.force("center", d3.forceCenter(w / 2, h / 2))
 		.force("x", d3.forceX(w * 0.8))
@@ -65,7 +68,7 @@ Graph.prototype.create = function (w, h, links, nodes, neighbors, weights, trans
 	}
 
 
-	var zoom = new Zoom(this.svg, this.layer, trans);
+	//var zoom = new Zoom(this.svg, this.layer, trans);
 
 	simulation
 		.nodes(nodes)
@@ -76,7 +79,6 @@ Graph.prototype.create = function (w, h, links, nodes, neighbors, weights, trans
 		.links(links);
 
 	function ticked() {
-
 		 //    link
 		 //        .attr("x1", function(d) { return trans.x + trans.k * d.source.x; })
 		 //        .attr("y1", function(d) { return trans.y + trans.k * d.source.y; })
@@ -90,7 +92,6 @@ Graph.prototype.create = function (w, h, links, nodes, neighbors, weights, trans
 			// label
 			// 	.attr("x", function(d) { return trans.x + trans.k * d.x+12; })
 			// 	.attr("y", function(d) { return trans.y + trans.k * d.y+3; });
-			
 		link
 		    .attr("x1", function(d) { return d.source.x; })
 		    .attr("y1", function(d) { return d.source.y; })
@@ -98,12 +99,26 @@ Graph.prototype.create = function (w, h, links, nodes, neighbors, weights, trans
 		    .attr("y2", function(d) { return d.target.y; });
 			    
 		node
-			.attr("cx", function(d) { return d.x; })
+			.attr("cx", function(d) { 
+				_this.paths.data.forEach(function(dd) {
+					//console.log(dd);
+					if (dd.force_id == d.id) {
+						dd.pos_end.x = d.x;
+						dd.pos_end.y = d.y;
+					}
+				});
+				return d.x; 
+			})
 			.attr("cy", function(d) { return d.y; });
 
 		label
 			.attr("x", function(d) { return d.x+10; })
 			.attr("y", function(d) { return d.y+3; });
+		_this.paths.Rerender();
+		
+		//d3.selectAll('.p'+nownode)
+		//	.forEach(function)
+		//console.log(nowx);
 	}
 
 	function highlight(node, state) {
