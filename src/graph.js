@@ -114,7 +114,7 @@ Graph.prototype.create = function (w, h, links, nodes, neighbors, weights, trans
 		label
 			.attr("x", function(d) { return d.x+10; })
 			.attr("y", function(d) { return d.y+3; });
-		_this.paths.Rerender();
+		_this.paths.Update();
 		
 		//d3.selectAll('.p'+nownode)
 		//	.forEach(function)

@@ -4,10 +4,11 @@ function Paths() {
 	this.num = 0;
 }
 
-Paths.prototype.outDist = 10;
+Paths.prototype.outDist = 20;
 	
 Paths.prototype.Create = function(matrix_nodes, matrix_list, dataNode, dataLink) {
 	var _this = this;
+	this.matrix_list = matrix_list;
 	//var zoom = new Zoom(d3.select('#mainsvg'), _this.locallayer, trans);
 	dataLink.forEach(function(d) {	
 		var in_matrix, in_force;
@@ -54,7 +55,37 @@ Paths.prototype.Create = function(matrix_nodes, matrix_list, dataNode, dataLink)
 	//console.log(_this.data);
 }
 
-Paths.prototype.Delete = function() {
+Paths.prototype.UpdateData = function() {  //update existing data 
+	var _this = this;
+	this.data.forEach(function(d) { //rearrange
+		var matrix;
+		var num;
+		for (var i in _this.matrix_list) if (_this.matrix_list[i].nodes.indexOf(d.matrix_id) >= 0) { //find the matrix and num
+			matrix = _this.matrix_list[i];
+			num = _this.matrix_list[i].nodes.indexOf(d.matrix_id);
+			break;
+		}
+		d.pos0.x = matrix.x+num*matrix.unitsize+matrix.unitsize/2;
+		d.pos0.y = matrix.y;
+		d.pos1.x = matrix.x;
+		d.pos1.y = matrix.y+num*matrix.unitsize+matrix.unitsize/2;
+		d.pos2.x = matrix.x+matrix.num_nodes*matrix.unitsize;
+		d.pos2.y = matrix.y+num*matrix.unitsize+matrix.unitsize/2;
+		d.pos3.x = matrix.x+num*matrix.unitsize+matrix.unitsize/2
+		d.pos3.y = matrix.y+matrix.num_nodes*matrix.unitsize;
+	});
+}
+
+Paths.prototype.Delete = function(id) {
+	var _this = this;
+	this.locallayer.selectAll('.path'+id).remove();
+	for (var i=this.data.length-1;i>=0;i--) if (this.data[i].matrix_id == id) this.data.splice(i, 1); //delete data that won't be used
+	this.UpdateData();
+	this.Update();
+}
+
+Paths.prototype.Push = function(id) {
+	
 	
 }
 
@@ -92,6 +123,7 @@ Paths.prototype.generate = function(d) {
 }
 	
 Paths.prototype.Render = function() {
+	d3.selectAll(this.locallayer.attr('id')+' > *').remove();
 	var _this = this;
 	console.log(_this.data);
 	var line = d3.line()
@@ -102,20 +134,21 @@ Paths.prototype.Render = function() {
 					.data(_this.data)
 					.enter()
 					.append('path')
-					.attr('class', 'stupidpaths')
+					.attr('class', function(d) {return 'path'+d.matrix_id;})
 					.attr('d', function(d) {return line(_this.generate(d));})
-					.attr('stroke', 'grey')
-					.attr('stroke-width', 1)
-					.attr('fill', 'none');
+					.attr('stroke', '#999')
+					.attr('stroke-width', 2)
+					.attr('fill', 'none')
+					.attr('stroke-opacity', 0.2);
 }
 
-Paths.prototype.Rerender = function() {
+Paths.prototype.Update = function() {
 	var _this = this;
 	var line = d3.line()
 				.x(function(d) {return d[0];})
 				.y(function(d) {return d[1];})
 				.curve(d3.curveBasis);
-	this.locallayer.selectAll('.stupidpaths')
+	this.locallayer.selectAll('path')
 					.attr('d', function(d) {return line(_this.generate(d));});
 }
 

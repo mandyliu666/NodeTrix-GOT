@@ -66,8 +66,9 @@
 				var dataNodes = [];
 				var nodeWeight = {};
 				var neighbors = {};
-				var m = new Matrix(0);
+				
 				var paths = new Paths();
+				var m = new Matrix(0, paths);
 				m.Create(['Aemon-Targaryen-', 'Jon-Snow', 'Eddard-Stark','Aggo'], dataLink);
 				matrix_list.push(m);
 				dataNode.forEach(function(d) {
@@ -120,6 +121,7 @@
 				// slider.oninput = function() {
 				//     output.innerHTML = this.value;
 				// }
+			
 			
 			//suggest I have a list of m
 			});
