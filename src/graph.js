@@ -65,7 +65,7 @@ Graph.prototype.create = function (w, h, links, nodes, neighbors, weights, trans
 	}
 
 
-	var zoom = new Zoom(this.svg, this.layer, trans);
+	//var zoom = new Zoom(this.svg, this.layer, trans);
 
 	simulation
 		.nodes(nodes)
