@@ -1,12 +1,12 @@
-function Matrix(id) {
-	this.id = id;
+function Matrix(x, y) {
+	this.id = matrix_list.length;
 	this.num_nodes = 0;
 	this.num_edges = 0;
 	this.nodes = [];
 	this.edges = [];
 	this.adj_matrix = [];
-	this.x = 100;
-	this.y = 100;
+	this.x = x;
+	this.y = y;
 	this.locallayer = d3.select('#matrix')
 						.append('g')
 						.attr('id', 'mat'+this.id);	
@@ -18,14 +18,17 @@ Matrix.prototype.unitsize = 15;
 Matrix.prototype.fontsize = 10;
 
 //Matrix.prototype.insert
-Matrix.prototype.Create = function(node, data) {
+Matrix.prototype.Create = function(node) {
 	var _this = this;
-	this.data = data;
+	//this.data = data;
 	//var zoom = new Zoom(d3.select('#mainsvg'), _this.locallayer, trans);
-	for (var i in node) this.nodes.push(node[i]);
+	for (var i in node) {
+		this.nodes.push(node[i]);
+		matrix_nodes.push(node[i]);
+	}
 	this.num_nodes = node.length;
 	//console.log(data);
-	data.forEach(function(d, i) {
+	originData.forEach(function(d, i) {
 		if ((node.includes(d.Source)) && (node.includes(d.Target))) {
 			_this.edges.push(d);
 			_this.num_edges=_this.num_edges+1;
@@ -45,6 +48,10 @@ Matrix.prototype.Create = function(node, data) {
 		this.adj_matrix[x][y] = 1;
 		this.adj_matrix[y][x] = 1;
 	}
+	matrix_list.push(this);
+	this.Render();
+	if (paths.created)
+		for (var i in node) paths.Push(node[i]);
 }
 
 Matrix.prototype.Delete = function(id) { //delete id from one matrix
@@ -65,23 +72,24 @@ Matrix.prototype.Push = function(id) {
 	var _this = this;
 	var num = this.nodes.indexOf(id);
 	if (num < 0) {
-		this.nodes.push(id);
 		for (var i in this.nodes) this.adj_matrix[i].push(0);
+		this.nodes.push(id);
 		this.adj_matrix.push([]);
 		for (var i in this.nodes) this.adj_matrix[this.num_nodes].push(0);
-		data.forEach(function(d) {
+		originData.forEach(function(d) {
 			if (d.Source==id && _this.nodes.indexOf(d.Target)>=0) {
-				this.adj_matrix[this.num_nodes][_this.nodes.indexOf(d.Target)] = 1;
-				this.adj_matrix[_this.nodes.indexOf(d.Target)][this.num_nodes] = 1;
+				_this.adj_matrix[_this.num_nodes][_this.nodes.indexOf(d.Target)] = 1;
+				_this.adj_matrix[_this.nodes.indexOf(d.Target)][_this.num_nodes] = 1;
 			}
 			else if (d.Target==id && _this.nodes.indexOf(d.Source)>=0) {
-				this.adj_matrix[this.num_nodes][_this.nodes.indexOf(d.Source)] = 1;
-				this.adj_matrix[_this.nodes.indexOf(d.Source)][this.num_nodes] = 1;
+				_this.adj_matrix[_this.num_nodes][_this.nodes.indexOf(d.Source)] = 1;
+				_this.adj_matrix[_this.nodes.indexOf(d.Source)][_this.num_nodes] = 1;
 			}
 		});
 		this.num_nodes++;
 	}
 	this.Render();
+	paths.Push(id, originData);
 }
 
 Matrix.prototype.Clear = function() {
@@ -98,14 +106,15 @@ Matrix.prototype.Render = function() {
 	for (var i in this.nodes)
 		for (var j in this.nodes) {
 			_this.locallayer.append('rect')
-							.data([{i: i, j: j}])
+							.data([{id: _this.id, i: +i, j: +j}])
 							.attr('class', 'matrix'+_this.id)
 							.attr('width', this.unitsize-1)
 							.attr('height', this.unitsize-1)
 							.attr('x', _this.x+i*this.unitsize)
 							.attr('y', _this.y+j*this.unitsize)
 							.style('fill', function(d){return (_this.adj_matrix[d.i][d.j]==1)?'#cbcbcb':'#424242';})
-							.on('mousedown', function(d) {
+							.on('contextmenu', function(d) {
+								d3.event.preventDefault();
 								if (d.i==d.j) {
 									_this.Delete(_this.nodes[d.i]);
 								}
@@ -115,13 +124,16 @@ Matrix.prototype.Render = function() {
 							})
 							.on('mouseout', function(d) {
 								d3.select(this).style('fill', function(){return (_this.adj_matrix[d.i][d.j]==1)?'#cbcbcb':'#424242';});
-							});
-							//.style('stroke', '#cbcbcb');
+							})
+							.call(d3.drag()
+									.on("start", dragstarted)
+									.on("drag", dragged)
+									.on("end", dragended));
 		}
 	for (var i in this.nodes) {
 		_this.locallayer.append('text')
 						.attr('class', function(){return 'text'+_this.id;})
-						.text(this.nodes[i])
+						.text(ReplaceDash(this.nodes[i]))
 						.style('text-anchor', 'end')
 						.attr('x', this.x-5)
 						.attr('y', this.y+i*this.unitsize+10)
@@ -129,5 +141,30 @@ Matrix.prototype.Render = function() {
 	}				
 };
 
+function ReplaceDash(str) {
+	for (var i=0;i<str.length;i++) if (str.charAt(i)=='-') str = str.slice(0,i)+' '+str.slice(i+1);
+	return str;
+}
+
+function dragstarted(d) {
+	d3.selectAll('.matrix'+d.id).raise().classed("active", true);
+}
+
+function dragged(d) {
+	var matrix = matrix_list[d.id];
+	var mat = d3.selectAll('.matrix'+d.id)
+	matrix.x = d3.event.x-d.i*matrix.unitsize;
+	matrix.y = d3.event.y-d.j*matrix.unitsize;
+	matrix.Render();
+	paths.UpdateData();
+	paths.Update();
+	//d3.select('.').attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+}
+
+function dragended(d) {
+	d3.select('.matrix'+d.id).classed("active", false);
+}
+
 var matrix_list = [];
 var matrix_nodes = [];
+var originData;
