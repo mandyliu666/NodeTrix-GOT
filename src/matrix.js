@@ -1,4 +1,4 @@
-function Matrix(id, paths) {
+function Matrix(id) {
 	this.id = id;
 	this.num_nodes = 0;
 	this.num_edges = 0;
@@ -10,7 +10,7 @@ function Matrix(id, paths) {
 	this.locallayer = d3.select('#matrix')
 						.append('g')
 						.attr('id', 'mat'+this.id);	
-	this.paths = paths;
+	//this.paths = paths;
 }
 
 Matrix.prototype.type = 'matrix';
@@ -57,7 +57,7 @@ Matrix.prototype.Delete = function(id) { //delete id from one matrix
 		//for (var i in this.edges)
 	}
 	this.num_nodes--;
-	this.paths.Delete(id);
+	paths.Delete(id);
 	this.Render();
 }
 
@@ -128,3 +128,6 @@ Matrix.prototype.Render = function() {
 						.style('font-size', '10px');
 	}				
 };
+
+var matrix_list = [];
+var matrix_nodes = [];
