@@ -52,9 +52,9 @@
 						.attr('height', height);
 
 					// remove previous graphs
-					svg.select("#matrix > *").remove();
-					svg.select("#force > *").remove();
-					svg.select("#path > *").remove();
+					d3.selectAll("#matrix > *").remove();
+					d3.selectAll("#force > *").remove();
+					d3.selectAll("#path > *").remove();
 
 					var matrix_layer = svg.append('g').attr('id', 'matrix');
 					var force_layer = svg.append('g').attr('id', 'force');
@@ -112,7 +112,7 @@
 					//draw_force(width, height, dataLinks, dataNodes, transform, svg, force_layer);
 					
 					var graph = new Graph(paths);
-					graph.create(width, height, dataLinks, dataNodes, neighbors, nodeWeight);
+					graph.create(width, height, dataLinks, dataNodes, neighbors, nodeWeight, transform);
 					
 					var l = new Lasso();
 					l.bind();

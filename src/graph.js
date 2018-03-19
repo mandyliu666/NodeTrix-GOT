@@ -15,9 +15,10 @@ function Graph(paths) {
 		//"Frey": "",
 		"Tyrell": "#4e7524"
 	};
+
 }
 
-Graph.prototype.create = function (w, h, links, nodes, neighbors, weights) {
+Graph.prototype.create = function (w, h, links, nodes, neighbors, weights, trans) {
 	var _this = this;
 	var network = this.layer.append("g");
 	var link = network.append("g")
@@ -25,7 +26,7 @@ Graph.prototype.create = function (w, h, links, nodes, neighbors, weights) {
 		.selectAll("line")
 		.data(links)
 		.enter().append("line")
-		.attr("fill", "#000")
+		.attr("fill", "#bbb")
 	    .attr("stroke-width", 2);
 
 	var node = network.append("g")
@@ -44,8 +45,8 @@ Graph.prototype.create = function (w, h, links, nodes, neighbors, weights) {
 			} else return "#bbb";
 		})
 		.attr('pointer-events', 'all')
-		.on("mouseover", function(d) { highlight(d, true); })
-		.on("mouseout", function(d) { highlight(d, false); })
+		.on("mouseover", function(d) { highlight(d, true, neighbors, trans); })
+		.on("mouseout", function(d) { highlight(d, false, neighbors, trans); })
 		.call(d3.drag()
 		.on("start", dragstarted)
 		.on("drag", dragged)
@@ -139,38 +140,38 @@ Graph.prototype.create = function (w, h, links, nodes, neighbors, weights) {
 		//	.forEach(function)
 		//console.log(nowx);
 	}
-
-	function highlight(node, state) {
-
-		var nid = parseId(node.id);
-
-		var c = d3.select("#n" + nid);
-		var l = d3.select("#l" + nid);
-
-	    c.classed("main", state);
-	    l.classed("on", state || trans.k >= this.threshold);
-	    l.classed("main", state);
-		
-		// activate all siblings
-	    neighbors[node.id].forEach( 
-	        function(id) {
-	      		var idd = parseId(id);
-				d3.select("#n" + idd).classed("sibling", state);
-				d3.select("#l" + idd).classed("on", state || trans.k >= this.threshold);
-				d3.select("#l" + idd).selectAll("text").classed("sibling", state);
-	      	});
-	}
-		
-	function parseId(id) {
-		if(id.indexOf('(') != -1) {
-			var lidx = id.indexOf('(');
-			var ridx = id.indexOf(')');
-			return id.substring(0, lidx) + '\\' + id.substring(lidx, ridx) + '\\' + id.substring(ridx);
-		} else return id;
-	}
 }
 
 Graph.prototype.update = function () {
 
+}
+
+function highlight(node, state, neighbors, trans) {
+
+	var nid = parseId(node.id);
+
+	var c = d3.select("#n" + nid);
+	var l = d3.select("#l" + nid);
+
+	c.classed("main", state);
+	l.classed("on", state || trans.k >= this.threshold);
+	l.classed("main", state);
+		
+	// activate all siblings
+	neighbors[node.id].forEach( 
+	    function(id) {
+	      	var idd = parseId(id);
+			d3.select("#n" + idd).classed("sibling", state);
+			d3.select("#l" + idd).classed("on", state || trans.k >= this.threshold);
+			d3.select("#l" + idd).selectAll("text").classed("sibling", state);
+	    });
+}
+
+function parseId (id) {
+	if(id.indexOf('(') != -1) {
+		var lidx = id.indexOf('(');
+		var ridx = id.indexOf(')');
+		return id.substring(0, lidx) + '\\' + id.substring(lidx, ridx) + '\\' + id.substring(ridx);
+	} else return id;
 }
 
