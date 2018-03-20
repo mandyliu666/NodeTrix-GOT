@@ -89,7 +89,7 @@ g.labels {
 	font-weight: normal;
 	visibility: hidden;
 	font-size: 10px;
-    text-shadow: 0px 1px #fff;
+    text-shadow: 0px 0px 5px #fff;
 }
 
 .label.on {
@@ -187,4 +187,9 @@ text.on {
     margin-top: 20px;
 }
 
+#colorLegend {
+    font-size: 15px;
+    margin-top: 20px;
+    margin-left: 30px;
+}
 

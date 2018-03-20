@@ -30,14 +30,21 @@
 				<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
 			</div>
 			<div id="colorLegend">
-				<input id="checkStark" type="checkbox">
-				<input id="checkArryn" type="checkbox">
-				<input id="checkLannister" type="checkbox">
-				<input id="checkGreyjoy" type="checkbox">
-				<input id="checkMartell" type="checkbox">
-				<input id="checkBaratheon" type="checkbox">
-				<input id="checkTargaryen" type="checkbox">
-				<input id="checkTyrell" type="checkbox">
+				<input id="checkStark" type="checkbox"> Stark
+				<br>
+				<input id="checkArryn" type="checkbox"> Arryn
+				<br>
+				<input id="checkLannister" type="checkbox"> Lannister
+				<br>
+				<input id="checkGreyjoy" type="checkbox"> Greyjoy
+				<br>
+				<input id="checkMartell" type="checkbox"> Martell
+				<br>
+				<input id="checkBaratheon" type="checkbox"> Baratheon
+				<br> 
+				<input id="checkTargaryen" type="checkbox"> Targaryen
+				<br>
+				<input id="checkTyrell" type="checkbox"> Tyrell
 			</div>
 		</div>
 		<div id="networkPlot"></div>
@@ -56,6 +63,11 @@
 			"Targaryen": "#960702",
 			//"Frey": "",
 			"Tyrell": "#4e7524"
+		};
+		var transform = {
+			x: 0.0,
+			y: 0.0,
+			k: 1.0
 		};
 		var graph = new Graph(width, height, colorlegend);
 		function visualize(booknumber) {
@@ -90,11 +102,7 @@
 					matrix_nodes = [];
 					originData = dataLink;
 					
-					var transform = {
-						x: 0.0,
-						y: 0.0,
-						k: 1.0
-					};
+					
 					var threshold = 2;
 					var dataLinks = [];
 					var dataNodes = [];
@@ -136,7 +144,7 @@
 					
 					for (var i in matrix_list) matrix_list[i].Render();
 					//var graph = new Graph();
-					graph.create(dataLinks, dataNodes, neighbors, nodeWeight, transform);
+					graph.create(dataLinks, dataNodes, neighbors, nodeWeight);
 					paths.Create(dataLink);		
 					m.Push('Harwin');
 					
