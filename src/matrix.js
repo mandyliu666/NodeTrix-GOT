@@ -183,6 +183,17 @@ function dragged(d) {
 
 function dragended(d) {
 	d3.select('.matrix'+d.id).classed("active", false);
+	
+	for (var i in matrix_list) {
+		var matrix = matrix_list[i];
+		var x = d3.event.x;
+		var y = d3.event.y;
+		if (x>matrix.x && x<matrix.x+matrix.unitsize*matrix.num_nodes && y>matrix.y && y<matrix.y+matrix.unitsize*matrix.num_nodes && i!=d.id) {
+			//console.log(2);
+			for (var k in matrix_list[d.id].nodes) matrix.Push(matrix_list[d.id].nodes[k]);
+			matrix_list[d.id].Clear();
+		}
+	}
 }
 
 var matrix_list = [];

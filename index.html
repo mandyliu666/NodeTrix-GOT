@@ -110,8 +110,6 @@
 					var neighbors = {};
 					
 					//var paths = new Paths();
-					var m = new Matrix(100, 100);
-					m.Create([split('Aemon-Targaryen-(sdfas)'), 'Jon-Snow', 'Eddard-Stark','Aggo']);
 					
 					dataNode.forEach(function(d) {
 						d.id = d.Id;
@@ -142,10 +140,25 @@
 						return nodeWeight[d.source] >= 3 && nodeWeight[d.target] >= 3;
 					});
 					
-					for (var i in matrix_list) matrix_list[i].Render();
+					
+					//for (var i in matrix_list) matrix_list[i].Render();
 					//var graph = new Graph();
+					
+					var m = new Matrix(100, 100);
+					m.Create(['Jon-Snow', dataNodes[0].Id, dataNodes[1].Id]);
+					var aaa = {};
+					for (var i in matrix_nodes) aaa[matrix_nodes[i]] = 1;
+					
 					graph.create(dataLinks, dataNodes, neighbors, nodeWeight);
-					paths.Create(dataLink);		
+					
+					paths.Create(dataLink);
+					
+					graph.delete(aaa);
+					
+					
+					
+					
+							
 					//m.Push('Harwin');
 					
 					var l = new Lasso();
