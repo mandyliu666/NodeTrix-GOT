@@ -111,7 +111,7 @@ Paths.prototype.Push = function(id) {
 			in_force = d.Source;
 		}
 		else return;
-		var node = d3.selectAll('#n'+in_force);
+		var node = d3.select('#n'+in_force);
 		if (node.empty()) return;
 		_this.data.push({
 			r: node.attr('r'),
@@ -126,6 +126,7 @@ Paths.prototype.Push = function(id) {
 			pos3: {x: matrix.x+num*matrix.unitsize+matrix.unitsize/2, y: matrix.y+matrix.num_nodes*matrix.unitsize},
 			pos_end: {x: 0, y: 0},
 		})
+		//console.log(_this.data[_this.data.length-1]);
 		_this.num++;
 	});
 	this.Render();
@@ -174,7 +175,7 @@ Paths.prototype.generate = function(d) {
 }
 	
 Paths.prototype.Render = function() {
-	d3.selectAll(this.locallayer.attr('id')+' > *').remove();
+	d3.selectAll('path').remove();
 	var _this = this;
 	//console.log(_this.data);
 	var line = d3.line()

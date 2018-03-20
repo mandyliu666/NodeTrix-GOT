@@ -100,6 +100,20 @@ Graph.prototype.create = function (links, nodes, neighbors, weights) {
 	  	if (!d3.event.active) simulation.alphaTarget(0);
 	  	d.fx = null;
 	  	d.fy = null;
+		console.log(1);
+		for (var i in matrix_list) {
+			var matrix = matrix_list[i];
+			var x = d3.event.x;
+			var y = d3.event.y;
+			if (x>matrix.x && x<matrix.x+matrix.unitsize*matrix.num_nodes && y>matrix.y && y<matrix.y+matrix.unitsize*matrix.num_nodes) {
+				console.log(2);
+				var aaa = {};
+				aaa[d.id] = 1;
+				_this.delete(aaa);
+				matrix.Push(d.id);
+			}
+		}
+		
 	}
 
 	simulation
@@ -157,6 +171,7 @@ Graph.prototype.create = function (links, nodes, neighbors, weights) {
 }
 
 Graph.prototype.add = function (ids) {
+	console.log(ids);
 	if(Object.keys(ids).length === 0) return;
 	// add more nodes & links in the graph
 	var n = this.currNodes;
@@ -182,6 +197,21 @@ Graph.prototype.add = function (ids) {
 	this.currLinks = l;
 	this.currNeighbors = ngb;
 	graph.update();
+	
+	/*originData.forEach(function(d) {
+		var in_matrix, in_force;
+		if (matrix_nodes.indexOf(d.Source)>=0 && ) {
+			in_matrix = d.Source;
+			in_force = d.Target;
+		}
+		else if (matrix_nodes.indexOf(d.Target)>=0) {
+			in_matrix = d.Target;
+			in_force = d.Source;
+		}
+		else return;
+		
+	});*/
+	//paths.Create();
 }
 
 Graph.prototype.delete = function (ids) {
@@ -215,6 +245,11 @@ Graph.prototype.delete = function (ids) {
 			}
 		}
 	});
+	
+	for (var str in Object.keys(ids)) d3.select('#n'+Object.keys(ids)[str]).remove();
+	
+	for (var i=paths.data.length-1;i>=0;i--) if (paths.data[i].force_id in ids) paths.data.splice(i, 1); //delete data that won't be used
+	paths.Render();
 
 	this.currNodes = n;
 	this.currLinks = l;
@@ -298,6 +333,18 @@ Graph.prototype.update = function () {
 	  	if (!d3.event.active) simulation.alphaTarget(0);
 	  	d.fx = null;
 	  	d.fy = null;
+		for (var i in matrix_list) {
+			var matrix = matrix_list[i];
+			var x = d3.event.x;
+			var y = d3.event.y;
+			if (x>matrix.x && x<matrix.x+matrix.unitsize*matrix.num_nodes && y>matrix.y && y<matrix.y+matrix.unitsize*matrix.num_nodes) {
+				console.log(2);
+				var aaa = {};
+				aaa[d.id] = 1;
+				_this.delete(aaa);
+				matrix.Push(d.id);
+			}
+		}
 	}
 
 	simulation

@@ -57,6 +57,8 @@ Matrix.prototype.Create = function(node) {
 Matrix.prototype.Delete = function(id) { //delete id from one matrix
 	var _this = this;
 	var num = this.nodes.indexOf(id);
+	var nn = matrix_nodes.indexOf(id);
+	matrix_nodes.splice(nn, 1);
 	if (num >= 0) {
 		this.nodes.splice(num, 1);
 		for (var i in this.adj_matrix) this.adj_matrix[i].splice(num, 1);
@@ -66,6 +68,9 @@ Matrix.prototype.Delete = function(id) { //delete id from one matrix
 	this.num_nodes--;
 	paths.Delete(id);
 	this.Render();
+	var aaa = {};
+	aaa[id] = 1;
+	graph.add(aaa);
 }
 
 Matrix.prototype.Push = function(id) {
@@ -128,6 +133,7 @@ Matrix.prototype.Render = function() {
 									});
 									d3.select(this).style('fill', 'blue');
 									d3.selectAll('path').attr('stroke', '#999');
+									//console.log(d3.selectAll('.path'+d.namei));
 									d3.selectAll('.path'+d.namei)
 										.attr('stroke', 'blue');
 									
