@@ -48,8 +48,7 @@ Lasso.prototype.bind = function () {
 		    	var id = d3.select(d).attr("id").substring(1);
 		    	newNodes[id] = 1;
 		    });
-		    //Graph.update(newNodes, trans);
-
+		    graph.delete(newNodes);
 	};
  
 	var lasso = this.lasso
