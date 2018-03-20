@@ -14,7 +14,7 @@ function Matrix(x, y) {
 }
 
 Matrix.prototype.type = 'matrix';
-Matrix.prototype.unitsize = 15;
+Matrix.prototype.unitsize = 10;
 Matrix.prototype.fontsize = 10;
 
 //Matrix.prototype.insert

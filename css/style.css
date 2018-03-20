@@ -1,5 +1,6 @@
 body {
-	background-color: #000;
+	/*background-color: #000;*/
+    background-image: url("../img/map.jpg");
 	font-family: 'Martel Sans', sans-serif;
 	margin-top: 0px;
 	font-size: 5px;
@@ -21,6 +22,7 @@ body p {
 	height: 50px;
 	font-size: 35px;
 	color: white;
+    margin-left: 30px;
 }
 
 .links line {
@@ -39,7 +41,7 @@ body p {
 	width: 300px;
 	height: 600px;
 	background-color: #fff;
-	opacity: 0.9;
+	opacity: 0.7;
 	margin-left: 30px;
 	border-radius: 15px;
 }
@@ -50,12 +52,12 @@ body p {
 	height: 600px;
 	margin-left: 350px;
 	background-color: #fff;
-	opacity: 0.9;
+	opacity: 0.7;
 	border-radius: 15px;
 	cursor: move;
 }
 
-circle {
+.nodes circle {
     cursor: crosshair;
     fill: #bbb;
 }
@@ -182,6 +184,7 @@ text.on {
 
 #bookSelector {
     width: 80%;
+    font-size: 20px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
@@ -193,3 +196,91 @@ text.on {
     margin-left: 30px;
 }
 
+#colors {
+    position: absolute;
+    margin-top: 0px;
+}
+
+circle.rounds {
+
+}
+
+#Stark {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #635e51;
+    position: absolute;
+    margin-left: 120px;
+    margin-top: -22px;
+}
+
+#Arryn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #3d4e99;
+    position: absolute;
+    margin-left: 120px;
+    margin-top: -22px;
+}
+
+#Lannister {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ebda58;
+    position: absolute;
+    margin-left: 120px;
+    margin-top: -22px;
+}
+
+#Greyjoy {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #3b394d;
+    position: absolute;
+    margin-left: 120px;
+    margin-top: -22px;
+}
+
+#Martell {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #c45302;
+    position: absolute;
+    margin-left: 120px;
+    margin-top: -22px;
+}
+
+#Baratheon {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #8c4054;
+    position: absolute;
+    margin-left: 120px;
+    margin-top: -22px;
+}
+
+#Targaryen {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #960702;
+    position: absolute;
+    margin-left: 120px;
+    margin-top: -22px;
+}
+
+#Tyrell {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #4e7524;
+    position: absolute;
+    margin-left: 120px;
+    margin-top: -22px;
+}

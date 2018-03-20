@@ -26,26 +26,28 @@
 	<div id="background">
 		<div id="controlPanel">
 			<div id="bookSelector"></div>
-			<div id="nodeSlider">
+			<!-- <div id="nodeSlider">
 				<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-			</div>
+			</div> -->
 			<div id="colorLegend">
-				<input id="checkStark" type="checkbox"> Stark
+				<input class= "boxes" value="Stark" type="checkbox" checked> Stark <div id="Stark"></div>
 				<br>
-				<input id="checkArryn" type="checkbox"> Arryn
+				<input class= "boxes" value="Arryn" type="checkbox" checked> Arryn <div id="Arryn"></div>
 				<br>
-				<input id="checkLannister" type="checkbox"> Lannister
+				<input class= "boxes" value="Lannister" type="checkbox" checked> Lannister <div id="Lannister"></div>
 				<br>
-				<input id="checkGreyjoy" type="checkbox"> Greyjoy
+				<input class= "boxes" value="Greyjoy" type="checkbox" checked> Greyjoy <div id="Greyjoy"></div>
 				<br>
-				<input id="checkMartell" type="checkbox"> Martell
+				<input class= "boxes" value="Martell" type="checkbox" checked> Martell <div id="Martell"></div>
 				<br>
-				<input id="checkBaratheon" type="checkbox"> Baratheon
+				<input class= "boxes" value="Baratheon" type="checkbox" checked> Baratheon <div id="Baratheon"></div>
 				<br> 
-				<input id="checkTargaryen" type="checkbox"> Targaryen
+				<input class= "boxes" value="Targaryen" type="checkbox" checked> Targaryen <div id="Targaryen"></div>
 				<br>
-				<input id="checkTyrell" type="checkbox"> Tyrell
+				<input class= "boxes" value="Tyrell" type="checkbox" checked> Tyrell <div id="Tyrell"></div>
+				<div id="colors"></div>
 			</div>
+
 		</div>
 		<div id="networkPlot"></div>
 		<script>
@@ -70,6 +72,36 @@
 			k: 1.0
 		};
 		var graph = new Graph(width, height, colorlegend);
+		// var legend = d3.select("#colors").append('svg')
+		// 	.attr("transform", "translate(0, 0)")
+		// 	.attr("width", 100)
+		// 	.attr("height",500);
+
+		// var colors = [ 
+		// 	{ id: 0, color: "#635e51" },
+		// 	{ id: 1, color: "#3d4e99" },
+		// 	{ id: 2, color: "#ebda58" },
+		// 	{ id: 3, color: "#3b394d" },
+		// 	{ id: 4, color: "#c45302" },
+		// 	{ id: 5, color: "#8c4054" },
+		// 	{ id: 6, color: "#960702" },
+		// 	{ id: 7, color: "#4e7524" }
+		// ];
+
+		// legend.append("g")
+		// 	.selectAll("circle")
+		// 	.data(colors)
+		//     .enter().append("circle")
+		//     .attr("class", "rounds")
+		//     .attr("r", 5)
+		//     .attr("transform", function (d) {
+		//     	var y = d.id * 20;
+		//     	return "translate(" + 200 + ", " + y + ")";
+		//     })
+		//     .style("fill", function (d) {
+		//       return d.color;
+		//     });
+
 		function visualize(booknumber) {
 			d3.selectAll("#networkPlot > *").remove();
 			d3.csv(('data/asoiaf-book' + booknumber + '-edges.csv'), function(error, dataLink) {
@@ -163,6 +195,42 @@
 					//     output.innerHTML = this.value;
 					// }
 				//suggest I have a list of m
+
+					// d3.selectAll(".boxes").on("change", updateGraph());
+
+					// function updateGraph() {
+					// 	var choices = [];
+					// 	d3.selectAll(".boxes").each(function(d) {
+					// 		var check = d3.select(this);
+					// 		if(!check.property("checked")) {
+					// 			choices.push(check.property("value"));
+					// 		}
+					// 	});
+
+					// 	var deleted = [];
+					// 	var gg = {};
+
+					// 	var nn = dataNode.filter(function(d) {
+					// 		if(!choices.includes(d.fam)) {
+					// 			gg[d.Id] = [];
+					// 			return d;
+					// 		}
+					// 		else deleted.push(d.id);
+					// 	});
+
+					// 	var ll = dataLink.filter(function(d) {
+					// 		if(!(deleted.includes(d.source) || deleted.includes(d.target))) {
+					// 			gg[d.Source].push(d.Target);
+					// 			gg[d.Target].push(d.Source);
+					// 			return d;
+					// 		}
+					// 	});
+
+					// 	graph.create(ll, nn, gg, nodeWeight);
+					// 	paths.Create(ll);
+
+					// };
+
 				});
 			});
 
@@ -205,7 +273,5 @@
 	    	});
 		</script>
 	</div>
-	
-	<h1>Copyright &copy; 2018 Jiayu Tang & Yingdi Liu<h1>
 </body>
 </html>

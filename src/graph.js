@@ -14,6 +14,7 @@ function Graph(w, h, legend) {
 
 
 Graph.prototype.create = function (links, nodes, neighbors, weights) {
+	d3.selectAll("#networklayer > *").remove();
 	this.layer = d3.select("#force");
 	this.svg = d3.select("#mainsvg");
 	this.nodes = nodes;
@@ -171,7 +172,6 @@ Graph.prototype.create = function (links, nodes, neighbors, weights) {
 }
 
 Graph.prototype.add = function (ids) {
-	console.log(ids);
 	if(Object.keys(ids).length === 0) return;
 	// add more nodes & links in the graph
 	var n = this.currNodes;
