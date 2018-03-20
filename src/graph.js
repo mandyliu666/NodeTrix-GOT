@@ -178,21 +178,24 @@ Graph.prototype.add = function (ids) {
 	var l = this.currLinks;
 	var ngb = this.currNeighbors;
 	this.nodes.forEach(function(d) {
-		if(ids[d.Id] != null) {
+		if(ids[d.Id] === 1) {
 			n.push(d);
 			if(ngb[d.Id] == null) ngb[d.Id] = [];
 		}
 	});
-
+	//console.log(n);
+	//console.log(l);
+	//console.log(ngb);
 	this.links.forEach(function(d) {
-		if(ids[d.Source] == null || ids[d.Target] == null) {
-			if(!l.includes(d)) {
-				l.push(d);
-				ngb[d.Source].push(d.Target);
-				ngb[d.Target].push(d.Source);
-			}
+		if (l.indexOf(d) >= 0) return;
+		if(ids[d.Source] == 1 || ids[d.Target] == 1) {
+			l.push(d);
+			ngb[d.Source].push(d.Target);
+			ngb[d.Target].push(d.Source);
 		}
 	});
+	console.log(ngb);
+	//console.log(l);
 	this.currNodes = n;
 	this.currLinks = l;
 	this.currNeighbors = ngb;
@@ -224,16 +227,17 @@ Graph.prototype.delete = function (ids) {
 	this.nodes.forEach(function(d) {
 		if(ids[d.Id] == 1) {
 			var idx = n.indexOf(d);
-			if(idx != -1) n.splice(idx, 1);
+			if(idx >= -1) n.splice(idx, 1);
 			if(ngb[d.Id] != null) ngb[d.Id] = [];
 		}
 	});
-
 	this.links.forEach(function(d) {
-		if(!(ids[d.Source] == null && ids[d.Target] == null)) {
+		//if(!(ids[d.Source] == null && ids[d.Target] == null)) {
+		if (ids[d.Source] == 1 || ids[d.Target] == 1) {
 			if(l.includes(d)) {
 				var idx = l.indexOf(d);
 				l.splice(idx, 1);
+				//console.log(d);
 				if(ngb[d.Source] != null && ngb[d.Source].includes(d.Target)) {
 					var t = ngb[d.Source].indexOf(d.Target);
 					ngb[d.Source].splice(t, 1);
@@ -246,20 +250,26 @@ Graph.prototype.delete = function (ids) {
 		}
 	});
 	
-	for (var str in Object.keys(ids)) d3.select('#n'+Object.keys(ids)[str]).remove();
-	
-	for (var i=paths.data.length-1;i>=0;i--) if (paths.data[i].force_id in ids) paths.data.splice(i, 1); //delete data that won't be used
-	paths.Render();
-
 	this.currNodes = n;
 	this.currLinks = l;
 	this.currNeighbors = ngb;
 	graph.update();
+	
+	//for (var str in Object.keys(ids)) d3.select('#n'+Object.keys(ids)[str]).remove();
+	
+	for (var i=paths.data.length-1;i>=0;i--) if (paths.data[i].force_id in ids) paths.data.splice(i, 1); //delete data that won't be used
+	paths.Render();
+
+	
 }
 
 Graph.prototype.update = function () {
 
 	d3.selectAll("#networklayer > *").remove();
+	//console.log(d3.selectAll("circle"));
+	//d3.selectAll('circle').remove();
+	//d3.selectAll('.label').remove();
+	//d3.selectAll('line').remove();
 	var _this = this;
 
 	var nodes = this.currNodes;
@@ -267,6 +277,8 @@ Graph.prototype.update = function () {
 	var neighbors = this.currNeighbors;
 	var weights = this.weights;
 
+	//console.log(nodes);
+	//console.log(links);
 	var network = this.layer.append("g")
 		.attr("id", "networklayer");
 	var link = network.append("g")
