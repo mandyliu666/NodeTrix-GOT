@@ -86,6 +86,7 @@ Matrix.prototype.Push = function(id) {
 				_this.adj_matrix[_this.nodes.indexOf(d.Source)][_this.num_nodes] = 1;
 			}
 		});
+		this.adj_matrix[this.num_nodes][this.num_nodes] = 1;
 		this.num_nodes++;
 	}
 	this.Render();
@@ -106,7 +107,7 @@ Matrix.prototype.Render = function() {
 	for (var i in this.nodes)
 		for (var j in this.nodes) {
 			_this.locallayer.append('rect')
-							.data([{id: _this.id, i: +i, j: +j}])
+							.data([{namei:_this.nodes[i], namej:_this.nodes[j], id: _this.id, i: +i, j: +j}])
 							.attr('class', 'matrix'+_this.id)
 							.attr('width', this.unitsize-1)
 							.attr('height', this.unitsize-1)
@@ -121,9 +122,22 @@ Matrix.prototype.Render = function() {
 							})
 							.on('mouseover', function(d) {
 								d3.select(this).style('fill', 'red');
+								if (d.i==d.j) {
+									d3.selectAll('rect').style('fill', function(dd) {
+										return (matrix_list[dd.id].adj_matrix[dd.i][dd.j]==1)?'#cbcbcb':'#424242';
+									});
+									d3.select(this).style('fill', 'blue');
+									d3.selectAll('path').attr('stroke', '#999');
+									d3.selectAll('.path'+d.namei)
+										.attr('stroke', 'blue');
+									
+								}
 							})
 							.on('mouseout', function(d) {
-								d3.select(this).style('fill', function(){return (_this.adj_matrix[d.i][d.j]==1)?'#cbcbcb':'#424242';});
+								if (d.i!=d.j) d3.select(this).style('fill', function(){return (_this.adj_matrix[d.i][d.j]==1)?'#cbcbcb':'#424242';});
+								//if (d.i==d.j)
+								//	d3.selectAll('.path'+d.namei)
+								//		.attr('stroke', '#999');
 							})
 							.call(d3.drag()
 									.on("start", dragstarted)
